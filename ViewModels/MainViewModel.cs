@@ -27,6 +27,7 @@ public class MainViewModel : ViewModelBase
         _printerDiscovery = printerDiscovery;
 
         DeleteWorkflowCommand = new RelayCommand(DeleteWorkflow);
+        DuplicateWorkflowCommand = new RelayCommand(DuplicateWorkflow);
         RefreshPrintersCommand = new RelayCommand(RefreshPrinters);
 
         LoadWorkflows();
@@ -58,14 +59,59 @@ public class MainViewModel : ViewModelBase
     }
 
     public ICommand DeleteWorkflowCommand { get; }
+    public ICommand DuplicateWorkflowCommand { get; }
     public ICommand RefreshPrintersCommand { get; }
+
+    /// <summary>Aktivierung des Workflows in der Liste umschalten (Überwachung starten/stoppen).</summary>
+    public void ToggleWorkflowEnabled(PrintWorkflow workflow)
+    {
+        if (workflow == null) return;
+        workflow.IsEnabled = !workflow.IsEnabled;
+        if (workflow.IsEnabled)
+            _fileWatcher.StartWatching(workflow);
+        else
+            _fileWatcher.StopWatching(workflow.Id);
+        Persist();
+        StatusMessage = workflow.IsEnabled ? $"Workflow \"{workflow.Name}\" aktiviert." : $"Workflow \"{workflow.Name}\" deaktiviert.";
+    }
+
+    /// <summary>Workflow duplizieren (Kopie mit neuem Namen anlegen).</summary>
+    public void DuplicateWorkflow()
+    {
+        if (SelectedWorkflow == null)
+        {
+            StatusMessage = "Bitte einen Workflow auswählen.";
+            return;
+        }
+        var src = SelectedWorkflow;
+        var copy = new PrintWorkflow
+        {
+            Id = Guid.NewGuid(),
+            Name = "Kopie von " + src.Name,
+            WatchPath = src.WatchPath,
+            FilePattern = src.FilePattern,
+            PrinterName = src.PrinterName,
+            IsEnabled = false,
+            DelaySeconds = src.DelaySeconds,
+            PostAction = src.PostAction,
+            MoveToPath = src.MoveToPath,
+            RenameTo = src.RenameTo,
+            UseRegexPattern = src.UseRegexPattern
+        };
+        Workflows.Add(copy);
+        if (copy.IsEnabled)
+            _fileWatcher.StartWatching(copy);
+        Persist();
+        StatusMessage = $"Workflow \"{copy.Name}\" erstellt. Bitte ggf. anpassen und aktivieren.";
+    }
 
     /// <summary>Workflow aus dem grafischen Editor übernehmen (Neu).</summary>
     public void AddWorkflowFromEditor(PrintWorkflow workflow)
     {
         if (workflow == null) return;
         Workflows.Add(workflow);
-        _fileWatcher.StartWatching(workflow);
+        if (workflow.IsEnabled)
+            _fileWatcher.StartWatching(workflow);
         Persist();
         StatusMessage = $"Workflow \"{workflow.Name}\" hinzugefügt.";
     }
@@ -86,7 +132,9 @@ public class MainViewModel : ViewModelBase
         existing.MoveToPath = workflow.MoveToPath;
         existing.RenameTo = workflow.RenameTo;
         existing.UseRegexPattern = workflow.UseRegexPattern;
-        _fileWatcher.StartWatching(existing);
+        existing.IsEnabled = workflow.IsEnabled;
+        if (existing.IsEnabled)
+            _fileWatcher.StartWatching(existing);
         Persist();
         StatusMessage = $"Workflow \"{existing.Name}\" aktualisiert.";
     }

@@ -24,7 +24,7 @@
                   ItemsSource="{Binding Workflows}"
                   SelectedItem="{Binding SelectedWorkflow, Mode=TwoWay}"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True"
+                  IsReadOnly="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   CanUserReorderColumns="False"
@@ -37,10 +37,18 @@
                   Background="White"
                   MouseDoubleClick="WorkflowsGrid_MouseDoubleClick">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="140"/>
-                <DataGridTextColumn Header="Ordner" Binding="{Binding WatchPath}" Width="*" MinWidth="180"/>
-                <DataGridTextColumn Header="Muster" Binding="{Binding FilePattern}" Width="120"/>
-                <DataGridTextColumn Header="Drucker" Binding="{Binding PrinterName}" Width="160"/>
+                <DataGridTemplateColumn Header="Aktiv" Width="50" IsReadOnly="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsEnabled, Mode=OneWay}" HorizontalAlignment="Center"
+                                      Click="WorkflowActive_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="140" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Ordner" Binding="{Binding WatchPath}" Width="*" MinWidth="180" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Muster" Binding="{Binding FilePattern}" Width="120" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Drucker" Binding="{Binding PrinterName}" Width="160" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -53,7 +61,9 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <Button x:Name="BtnNewWorkflow" Content="Neuer Workflow" Click="BtnNewWorkflow_Click" Margin="0,0,8,0"/>
                 <Button x:Name="BtnEditWorkflow" Content="Bearbeiten" Click="BtnEditWorkflow_Click" Margin="0,0,8,0"/>
+                <Button Content="Duplizieren" Command="{Binding DuplicateWorkflowCommand}" Margin="0,0,8,0"/>
                 <Button Content="Löschen" Command="{Binding DeleteWorkflowCommand}" Margin="0,0,8,0"/>
+                <Button x:Name="BtnLog" Content="Log" Click="BtnLog_Click" Margin="0,0,8,0"/>
                 <Button Content="Drucker aktualisieren" Command="{Binding RefreshPrintersCommand}" Margin="0,0,8,0"/>
                 <Button x:Name="BtnSettings" Content="Einstellungen" Click="BtnSettings_Click"/>
             </StackPanel>

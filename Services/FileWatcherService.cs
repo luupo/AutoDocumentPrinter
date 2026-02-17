@@ -7,13 +7,15 @@ namespace PrintMaster.Services;
 public class FileWatcherService : IFileWatcherService
 {
     private readonly IPrintService _printService;
+    private readonly ILogService _logService;
     private readonly ConcurrentDictionary<Guid, FileSystemWatcher> _watchers = new();
     /// <summary>Dateien, die beim Start der Überwachung bereits im Ordner lagen – werden ignoriert.</summary>
     private readonly ConcurrentDictionary<Guid, HashSet<string>> _initialFilePaths = new();
 
-    public FileWatcherService(IPrintService printService)
+    public FileWatcherService(IPrintService printService, ILogService logService)
     {
         _printService = printService;
+        _logService = logService;
     }
 
     public void StartWatching(PrintWorkflow workflow)
@@ -109,15 +111,19 @@ public class FileWatcherService : IFileWatcherService
         try
         {
             var success = await _printService.PrintAsync(fullPath, workflow.PrinterName).ConfigureAwait(false);
-            System.Diagnostics.Debug.WriteLine(success
-                ? $"Verarbeitet: {fullPath} -> {workflow.PrinterName}"
-                : $"Verarbeitung fehlgeschlagen: {fullPath}");
-            if (success && workflow.PostAction != PostActionType.None)
-                ExecutePostAction(fullPath, workflow);
+            if (success)
+            {
+                _logService.LogSuccess(fullPath, workflow.Name);
+                if (workflow.PostAction != PostActionType.None)
+                    ExecutePostAction(fullPath, workflow);
+            }
+            else
+                _logService.LogFailure(fullPath, workflow.Name, "Druckauftrag fehlgeschlagen.");
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"FileWatcherService.OnFileDetected: {ex.Message}");
+            _logService.LogFailure(fullPath, workflow.Name, ex.Message);
         }
     }
 

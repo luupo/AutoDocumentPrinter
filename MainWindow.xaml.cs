@@ -50,16 +50,28 @@ public partial class MainWindow : Window
         openItem.Click += (_, _) => { Show(); WindowState = WindowState.Normal; Activate(); };
         var settingsItem = new ToolStripMenuItem("Einstellungen");
         settingsItem.Click += (_, _) => BtnSettings_Click(null!, null!);
+        var logItem = new ToolStripMenuItem("Log anzeigen");
+        logItem.Click += (_, _) => { Show(); Activate(); BtnLog_Click(null!, null!); };
         var exitItem = new ToolStripMenuItem("Beenden");
         exitItem.Click += (_, _) => { _isReallyClosing = true; Close(); };
 
         _trayIcon.ContextMenuStrip = new ContextMenuStrip();
         _trayIcon.ContextMenuStrip.Items.Add(openItem);
         _trayIcon.ContextMenuStrip.Items.Add(settingsItem);
+        _trayIcon.ContextMenuStrip.Items.Add(logItem);
         _trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
         _trayIcon.ContextMenuStrip.Items.Add(exitItem);
 
         _trayIcon.DoubleClick += (_, _) => { Show(); WindowState = WindowState.Normal; Activate(); };
+
+        ViewModelLocator.LogService.PrintFailed += LogService_PrintFailed;
+    }
+
+    private void LogService_PrintFailed(string filePath, string workflowName)
+    {
+        _trayIcon?.ShowBalloonTip(5000, "PrintMaster – Druckfehler",
+            $"Workflow \"{workflowName}\": Druck fehlgeschlagen.\n{System.IO.Path.GetFileName(filePath)}",
+            ToolTipIcon.Error);
     }
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -72,6 +84,7 @@ public partial class MainWindow : Window
         }
         else
         {
+            ViewModelLocator.LogService.PrintFailed -= LogService_PrintFailed;
             _trayIcon?.Dispose();
             _trayIcon = null;
         }
@@ -110,9 +123,22 @@ public partial class MainWindow : Window
         win.ShowDialog();
     }
 
+    private void BtnLog_Click(object sender, RoutedEventArgs e)
+    {
+        var win = new LogWindow { Owner = this };
+        win.Show();
+    }
+
     private void WorkflowsGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (WorkflowsGrid.SelectedItem != null)
             BtnEditWorkflow_Click(sender, e);
+    }
+
+    private void WorkflowActive_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.FrameworkElement fe || fe.DataContext is not PrintMaster.Models.PrintWorkflow workflow)
+            return;
+        MainVm?.ToggleWorkflowEnabled(workflow);
     }
 }

@@ -18,6 +18,7 @@ public class WorkflowEditorViewModel : ViewModelBase
     private string _moveToPath = string.Empty;
     private string _renameTo = string.Empty;
     private bool _useRegexPattern;
+    private bool _isEnabled = true;
 
     public WorkflowEditorViewModel(
         string title,
@@ -38,6 +39,7 @@ public class WorkflowEditorViewModel : ViewModelBase
             _moveToPath = workflowToEdit.MoveToPath ?? string.Empty;
             _renameTo = workflowToEdit.RenameTo ?? string.Empty;
             _useRegexPattern = workflowToEdit.UseRegexPattern;
+            _isEnabled = workflowToEdit.IsEnabled;
         }
 
         InstalledPrinters = new ObservableCollection<string>(installedPrinters);
@@ -114,6 +116,12 @@ public class WorkflowEditorViewModel : ViewModelBase
         set => SetProperty(ref _useRegexPattern, value);
     }
 
+    public bool IsEnabled
+    {
+        get => _isEnabled;
+        set => SetProperty(ref _isEnabled, value);
+    }
+
     public Array PostActionTypes { get; } = Enum.GetValues(typeof(PostActionType));
 
     public PrintWorkflow? ResultWorkflow { get; private set; }
@@ -183,12 +191,12 @@ public class WorkflowEditorViewModel : ViewModelBase
             WatchPath = WatchPath.Trim(),
             FilePattern = string.IsNullOrWhiteSpace(FilePattern) ? "*.*" : FilePattern.Trim(),
             PrinterName = PrinterName,
-            IsEnabled = _original?.IsEnabled ?? true,
             DelaySeconds = DelaySeconds,
             PostAction = PostAction,
             MoveToPath = MoveToPath.Trim(),
             RenameTo = RenameTo.Trim(),
-            UseRegexPattern = UseRegexPattern
+            UseRegexPattern = UseRegexPattern,
+            IsEnabled = IsEnabled
         };
         DialogResult = true;
         CloseRequested?.Invoke();

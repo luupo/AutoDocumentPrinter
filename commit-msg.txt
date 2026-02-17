@@ -1,0 +1,1 @@
+Duplizieren, Log-Fenster, Tray bei Fehlern, TODO.md (priorisiert, inkl. virtueller Drucker)

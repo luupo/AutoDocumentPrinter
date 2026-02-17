@@ -1,0 +1,10 @@
+---
+description: Kein Co-authored-by in Git-Commits
+alwaysApply: true
+---
+
+# Commits ohne Co-authored-by
+
+- In **keinen** Commit-Messages darf "Co-authored-by: Cursor" (oder ähnlich) stehen.
+- Commits immer mit Message aus einer **UTF-8-Datei** erstellen: `git commit -F datei.txt` (Datei enthält nur den gewünschten Text, keinen Co-authored-by-Block).
+- Nach dem Commit die verwendete Message-Datei löschen (z. B. commit_msg.txt).

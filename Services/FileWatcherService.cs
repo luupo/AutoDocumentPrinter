@@ -8,6 +8,8 @@ public class FileWatcherService : IFileWatcherService
 {
     private readonly IPrintService _printService;
     private readonly ConcurrentDictionary<Guid, FileSystemWatcher> _watchers = new();
+    /// <summary>Dateien, die beim Start der Überwachung bereits im Ordner lagen – werden ignoriert.</summary>
+    private readonly ConcurrentDictionary<Guid, HashSet<string>> _initialFilePaths = new();
 
     public FileWatcherService(IPrintService printService)
     {
@@ -25,7 +27,25 @@ public class FileWatcherService : IFileWatcherService
 
         try
         {
-            var watcher = new FileSystemWatcher(workflow.WatchPath)
+            var watchPath = Path.GetFullPath(workflow.WatchPath);
+            var initialPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                foreach (var path in Directory.EnumerateFiles(watchPath, "*", SearchOption.TopDirectoryOnly))
+                {
+                    var name = Path.GetFileName(path);
+                    if (MatchesPattern(name, workflow.FilePattern, workflow.UseRegexPattern))
+                        initialPaths.Add(Path.GetFullPath(path));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"FileWatcherService: Snapshot vorhandener Dateien: {ex.Message}");
+            }
+
+            _initialFilePaths[workflow.Id] = initialPaths;
+
+            var watcher = new FileSystemWatcher(watchPath)
             {
                 NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.LastWrite,
                 Filter = "*.*"
@@ -45,6 +65,7 @@ public class FileWatcherService : IFileWatcherService
 
     public void StopWatching(Guid workflowId)
     {
+        _initialFilePaths.TryRemove(workflowId, out _);
         if (_watchers.TryRemove(workflowId, out var watcher))
         {
             try
@@ -71,7 +92,11 @@ public class FileWatcherService : IFileWatcherService
     {
         if (string.IsNullOrWhiteSpace(fileName))
             return;
-        if (!MatchesPattern(fileName, workflow.FilePattern))
+        if (!MatchesPattern(fileName, workflow.FilePattern, workflow.UseRegexPattern))
+            return;
+
+        var normalizedPath = Path.GetFullPath(fullPath);
+        if (_initialFilePaths.TryGetValue(workflow.Id, out var initial) && initial.Contains(normalizedPath))
             return;
 
         var delayMs = Math.Max(0, workflow.DelaySeconds) * 1000;
@@ -138,12 +163,23 @@ public class FileWatcherService : IFileWatcherService
         }
     }
 
-    private static bool MatchesPattern(string fileName, string pattern)
+    private static bool MatchesPattern(string fileName, string pattern, bool useRegex)
     {
         if (string.IsNullOrWhiteSpace(pattern))
             return true;
 
-        // Einfache Wildcard-Unterstützung: * als Platzhalter
+        if (useRegex)
+        {
+            try
+            {
+                return System.Text.RegularExpressions.Regex.IsMatch(fileName, pattern);
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+        }
+
         var regexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(pattern)
             .Replace("\\*", ".*")
             .Replace("\\?", ".") + "$";

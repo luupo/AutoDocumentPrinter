@@ -13,8 +13,11 @@ public class PrintWorkflow
     /// <summary>Pfad des zu überwachenden Ordners (z.B. C:\Users\Name\Downloads).</summary>
     public string WatchPath { get; set; } = string.Empty;
 
-    /// <summary>Dateimuster (z.B. Invoice*.pdf oder Versand*).</summary>
+    /// <summary>Dateimuster (z.B. Invoice*.pdf oder regulärer Ausdruck).</summary>
     public string FilePattern { get; set; } = string.Empty;
+
+    /// <summary>Wenn true, wird FilePattern als .NET-Regular-Expression ausgewertet (sonst Wildcards * und ?).</summary>
+    public bool UseRegexPattern { get; set; }
 
     /// <summary>Name des Windows-Druckers.</summary>
     public string PrinterName { get; set; } = string.Empty;

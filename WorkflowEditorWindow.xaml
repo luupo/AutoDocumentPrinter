@@ -23,6 +23,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Name -->
@@ -33,9 +34,17 @@
                          BorderBrush="#CCC" BorderThickness="1"/>
             </StackPanel>
 
-            <!-- Pipeline: Ordner → Muster → Drucker → (optional) Nach Aktion -->
-            <Border Grid.Row="1" Background="White" BorderBrush="#DEE2E6" BorderThickness="1"
-                    CornerRadius="4" Padding="16" Margin="0,0,0,16">
+            <!-- Hinweis: Drag & Drop -->
+            <TextBlock Grid.Row="1" Margin="0,0,0,6" FontSize="11" Foreground="#6C757D" TextWrapping="Wrap">
+                <Run Text="Datei hier in die Pipeline ziehen → Ordner und Dateiname werden übernommen. "/>
+                <Run Text="Ersetzen Sie den veränderlichen Teil durch * (z. B. Rechnung_*.pdf)." FontWeight="SemiBold"/>
+            </TextBlock>
+
+            <!-- Pipeline: Ordner → Muster → Drucker → (optional) Nach Aktion (Drop-Ziel) -->
+            <Border Grid.Row="2" x:Name="PipelineDropTarget" AllowDrop="True"
+                    Background="White" BorderBrush="#DEE2E6" BorderThickness="1"
+                    CornerRadius="4" Padding="16" Margin="0,0,0,16"
+                    DragOver="PipelineDropTarget_DragOver" Drop="PipelineDropTarget_Drop">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.06" Direction="270"/>
                 </Border.Effect>
@@ -75,7 +84,9 @@
                             <TextBlock Text="Dateimuster" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
                             <TextBox Text="{Binding FilePattern, UpdateSourceTrigger=PropertyChanged}"
                                      Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="#CCC"/>
-                            <TextBlock Text="z. B. *.pdf" FontSize="10" Foreground="#6C757D" Margin="0,4,0,0"/>
+                            <TextBlock Text="z. B. *.pdf oder ^Rechnung_\d+\.pdf$" FontSize="10" Foreground="#6C757D" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                            <CheckBox Content="Als regulären Ausdruck (Regex) verwenden" IsChecked="{Binding UseRegexPattern}"
+                                      Margin="0,6,0,0" FontSize="10"/>
                         </StackPanel>
                     </Border>
 
@@ -133,7 +144,7 @@
             </Border>
 
             <!-- Wartezeit + Hinweis -->
-            <StackPanel Grid.Row="2" Margin="0,0,0,12">
+            <StackPanel Grid.Row="3" Margin="0,0,0,12">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
                     <TextBlock Text="Wartezeit vor Verarbeitung (Sekunden):" VerticalAlignment="Center" Margin="0,0,8,0"/>
                     <TextBox Text="{Binding DelaySeconds, Converter={StaticResource IntConverter}, UpdateSourceTrigger=PropertyChanged}"
@@ -144,11 +155,11 @@
             </StackPanel>
 
             <!-- Fehlermeldung -->
-            <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="#DC3545" Margin="0,0,0,8"
+            <TextBlock Grid.Row="4" Text="{Binding ErrorMessage}" Foreground="#DC3545" Margin="0,0,0,8"
                        Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibility}, FallbackValue=Collapsed}"/>
 
             <!-- Buttons -->
-            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
                 <Button Content="Abbrechen" Command="{Binding CancelCommand}"
                         Padding="16,8" Margin="0,0,8,0" IsCancel="True" MinWidth="90"/>
                 <Button Content="Speichern" Command="{Binding SaveCommand}"

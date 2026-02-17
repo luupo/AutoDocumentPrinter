@@ -85,6 +85,7 @@ public class MainViewModel : ViewModelBase
         existing.PostAction = workflow.PostAction;
         existing.MoveToPath = workflow.MoveToPath;
         existing.RenameTo = workflow.RenameTo;
+        existing.UseRegexPattern = workflow.UseRegexPattern;
         _fileWatcher.StartWatching(existing);
         Persist();
         StatusMessage = $"Workflow \"{existing.Name}\" aktualisiert.";

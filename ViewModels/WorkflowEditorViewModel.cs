@@ -17,6 +17,7 @@ public class WorkflowEditorViewModel : ViewModelBase
     private PostActionType _postAction = PostActionType.None;
     private string _moveToPath = string.Empty;
     private string _renameTo = string.Empty;
+    private bool _useRegexPattern;
 
     public WorkflowEditorViewModel(
         string title,
@@ -36,6 +37,7 @@ public class WorkflowEditorViewModel : ViewModelBase
             _postAction = workflowToEdit.PostAction;
             _moveToPath = workflowToEdit.MoveToPath ?? string.Empty;
             _renameTo = workflowToEdit.RenameTo ?? string.Empty;
+            _useRegexPattern = workflowToEdit.UseRegexPattern;
         }
 
         InstalledPrinters = new ObservableCollection<string>(installedPrinters);
@@ -104,6 +106,12 @@ public class WorkflowEditorViewModel : ViewModelBase
     {
         get => _renameTo;
         set => SetProperty(ref _renameTo, value ?? string.Empty);
+    }
+
+    public bool UseRegexPattern
+    {
+        get => _useRegexPattern;
+        set => SetProperty(ref _useRegexPattern, value);
     }
 
     public Array PostActionTypes { get; } = Enum.GetValues(typeof(PostActionType));
@@ -179,7 +187,8 @@ public class WorkflowEditorViewModel : ViewModelBase
             DelaySeconds = DelaySeconds,
             PostAction = PostAction,
             MoveToPath = MoveToPath.Trim(),
-            RenameTo = RenameTo.Trim()
+            RenameTo = RenameTo.Trim(),
+            UseRegexPattern = UseRegexPattern
         };
         DialogResult = true;
         CloseRequested?.Invoke();

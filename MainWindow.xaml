@@ -52,11 +52,11 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Buttons + Status -->
+        <!-- Buttons + Status: Buttons haben Vorrang, Status nutzt Rest und kürzt mit ... -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" MinWidth="0"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                 <Button x:Name="BtnNewWorkflow" Content="Neuer Workflow" Click="BtnNewWorkflow_Click" Margin="0,0,8,0"/>
@@ -67,7 +67,7 @@
                 <Button Content="Drucker aktualisieren" Command="{Binding RefreshPrintersCommand}" Margin="0,0,8,0"/>
                 <Button x:Name="BtnSettings" Content="Einstellungen" Click="BtnSettings_Click"/>
             </StackPanel>
-            <TextBlock Grid.Column="1" VerticalAlignment="Center" MaxWidth="320" TextTrimming="CharacterEllipsis"
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0" TextTrimming="CharacterEllipsis"
                        Text="{Binding StatusMessage}" Foreground="#666" FontStyle="Italic"/>
         </Grid>
     </Grid>

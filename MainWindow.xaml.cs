@@ -1,4 +1,6 @@
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Forms;
@@ -10,6 +12,8 @@ public partial class MainWindow : Window
 {
     private NotifyIcon? _trayIcon;
     private bool _isReallyClosing;
+    private static string MainWindowPlacementPath =>
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PrintMaster", "mainwindow.json");
 
     public MainWindow()
     {
@@ -22,6 +26,8 @@ public partial class MainWindow : Window
 
     private void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        RestorePlacement();
+
         _trayIcon = new NotifyIcon
         {
             Text = "PrintMaster – Klicken zum Öffnen",
@@ -76,6 +82,7 @@ public partial class MainWindow : Window
 
     private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
+        SavePlacement();
         if (!_isReallyClosing)
         {
             e.Cancel = true;
@@ -88,6 +95,61 @@ public partial class MainWindow : Window
             _trayIcon?.Dispose();
             _trayIcon = null;
         }
+    }
+
+    private void RestorePlacement()
+    {
+        try
+        {
+            var path = MainWindowPlacementPath;
+            if (!File.Exists(path)) return;
+            var json = File.ReadAllText(path);
+            var doc = JsonDocument.Parse(json);
+            var r = doc.RootElement;
+            if (r.TryGetProperty("left", out var l) && r.TryGetProperty("top", out var t) &&
+                r.TryGetProperty("width", out var w) && r.TryGetProperty("height", out var h))
+            {
+                var left = l.GetDouble();
+                var top = t.GetDouble();
+                var width = w.GetDouble();
+                var height = h.GetDouble();
+                if (width >= MinWidth && width <= 4096 && height >= MinHeight && height <= 4096)
+                {
+                    Left = left;
+                    Top = top;
+                    Width = width;
+                    Height = height;
+                }
+                if (r.TryGetProperty("state", out var s) && s.TryGetInt32(out var state) && state == 2)
+                    WindowState = WindowState.Maximized;
+            }
+        }
+        catch { /* ignore */ }
+    }
+
+    private void SavePlacement()
+    {
+        try
+        {
+            var dir = Path.GetDirectoryName(MainWindowPlacementPath);
+            if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+            var state = WindowState == WindowState.Maximized ? 2 : (WindowState == WindowState.Minimized ? 1 : 0);
+            var left = Left;
+            var top = Top;
+            var width = Width;
+            var height = Height;
+            if (WindowState == WindowState.Maximized && RestoreBounds != default)
+            {
+                left = RestoreBounds.Left;
+                top = RestoreBounds.Top;
+                width = RestoreBounds.Width;
+                height = RestoreBounds.Height;
+            }
+            var obj = new { left, top, width, height, state };
+            var json = JsonSerializer.Serialize(obj, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(MainWindowPlacementPath, json);
+        }
+        catch { /* ignore */ }
     }
 
     private void BtnNewWorkflow_Click(object sender, RoutedEventArgs e)

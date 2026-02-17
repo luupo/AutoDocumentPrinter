@@ -54,7 +54,8 @@
                 <Button x:Name="BtnNewWorkflow" Content="Neuer Workflow" Click="BtnNewWorkflow_Click" Margin="0,0,8,0"/>
                 <Button x:Name="BtnEditWorkflow" Content="Bearbeiten" Click="BtnEditWorkflow_Click" Margin="0,0,8,0"/>
                 <Button Content="Löschen" Command="{Binding DeleteWorkflowCommand}" Margin="0,0,8,0"/>
-                <Button Content="Drucker aktualisieren" Command="{Binding RefreshPrintersCommand}"/>
+                <Button Content="Drucker aktualisieren" Command="{Binding RefreshPrintersCommand}" Margin="0,0,8,0"/>
+                <Button x:Name="BtnSettings" Content="Einstellungen" Click="BtnSettings_Click"/>
             </StackPanel>
             <TextBlock Grid.Column="1" VerticalAlignment="Center" MaxWidth="320" TextTrimming="CharacterEllipsis"
                        Text="{Binding StatusMessage}" Foreground="#666" FontStyle="Italic"/>

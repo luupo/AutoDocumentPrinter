@@ -27,6 +27,24 @@ PrintMaster/
 - **Hintergrund-Überwachung** per `FileSystemWatcher`; bei neuer passender Datei wird automatisch gedruckt („printto“-Verb)
 - **Konfiguration** wird in `%LocalAppData%\PrintMaster\workflows.json` gespeichert und beim Start geladen
 
+## Anwendungsbeispiel: Versandetiketten Deutsche Post
+
+Versandetiketten der Deutschen Post (z. B. aus dem Online-Frankiertool) sollen immer direkt auf den Etiketten-/Label-Drucker gehen, ohne manuelles Zuordnen.
+
+**Beispieldateiname:**  
+`Versandetiketten Deutsche Post A0060AXXXXX00000004C7.pdf`
+
+**Workflow in PrintMaster:**
+
+| Einstellung        | Wert                                                                 |
+|--------------------|----------------------------------------------------------------------|
+| **Name**           | z. B. „Deutsche Post Etiketten“                                     |
+| **Überwachter Ordner** | Ordner, in den die PDFs gelegt werden (z. B. Downloads oder ein eigener Ordner) |
+| **Dateimuster**    | `Versandetiketten Deutsche Post*.pdf` (Wildcard) oder Regex z. B. `^Versandetiketten Deutsche Post A\d+.*\.pdf$` |
+| **Ziel-Drucker**   | Ihr Etiketten-/Label-Drucker (z. B. „Label-Drucker“)                 |
+
+Sobald eine neue Datei mit diesem Muster im Ordner erscheint, wird sie automatisch an den gewählten Drucker gesendet. Optional kann im Workflow-Schritt 4 z. B. „Datei verschieben“ oder „Datei löschen“ nach dem Druck eingestellt werden.
+
 ## Build & Start
 
 ```bash

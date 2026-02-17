@@ -7,6 +7,9 @@ publish/
 *.exe
 !PrintMaster.csproj
 
+# Commit-Hilfe (kein Co-Author)
+commit-msg.txt
+
 # User/IDE
 .vs/
 .vscode/

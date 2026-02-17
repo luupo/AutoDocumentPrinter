@@ -1,0 +1,13 @@
+---
+description: Am Ende immer eine EXE für PrintMaster bauen
+alwaysApply: true
+---
+
+# Build: EXE am Ende
+
+Nach Änderungen am PrintMaster-Projekt **immer am Ende** eine ausführbare Datei (EXE) erzeugen.
+
+- **Befehl:** `dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o publish-release`
+- **Ausgabe:** Ordner `publish-release\` mit `PrintMaster.exe` (und ggf. wenigen Runtime-DLLs).
+- Wenn `publish\PrintMaster.exe` gesperrt ist (z. B. weil die App läuft), wird `publish-release` verwendet.
+- Kurz bestätigen, wo die EXE liegt (z. B. `publish-release\PrintMaster.exe`).

@@ -21,4 +21,16 @@ public class PrintWorkflow
 
     /// <summary>Workflow aktiv (Überwachung und Druck an).</summary>
     public bool IsEnabled { get; set; } = true;
+
+    /// <summary>Wartezeit in Sekunden nach Erkennung der Datei, bevor gedruckt wird (z. B. bis Schreibvorgang abgeschlossen ist).</summary>
+    public int DelaySeconds { get; set; } = 1;
+
+    /// <summary>Optionale Aktion nach der Verarbeitung (z. B. Datei löschen, verschieben, umbenennen).</summary>
+    public PostActionType PostAction { get; set; } = PostActionType.None;
+
+    /// <summary>Zielordner bei PostAction.Move.</summary>
+    public string MoveToPath { get; set; } = string.Empty;
+
+    /// <summary>Neuer Dateiname bei PostAction.Rename (im selben Ordner).</summary>
+    public string RenameTo { get; set; } = string.Empty;
 }

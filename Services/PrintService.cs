@@ -5,12 +5,21 @@ namespace PrintMaster.Services;
 
 public class PrintService : IPrintService
 {
+    private const string TestmodusPrinterName = "Testmodus";
+
     public async Task<bool> PrintAsync(string filePath, string printerName, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(filePath))
             return false;
         if (string.IsNullOrWhiteSpace(printerName))
             return false;
+
+        if (string.Equals(printerName, TestmodusPrinterName, StringComparison.OrdinalIgnoreCase))
+        {
+            await ShowTestmodusMessageAsync(filePath).ConfigureAwait(false);
+            return true;
+        }
+
         if (!File.Exists(filePath))
             return false;
 
@@ -50,5 +59,20 @@ public class PrintService : IPrintService
                 return false;
             }
         }, cancellationToken).ConfigureAwait(false);
+    }
+
+    private static async Task ShowTestmodusMessageAsync(string filePath)
+    {
+        var dispatcher = System.Windows.Application.Current?.Dispatcher;
+        if (dispatcher == null)
+            return;
+        await dispatcher.InvokeAsync(() =>
+        {
+            System.Windows.MessageBox.Show(
+                $"Der Workflow wurde ausgelöst.\n\nDatei: {filePath}\n\nEs ist noch der Testmodus eingestellt.",
+                "PrintMaster – Testmodus",
+                System.Windows.MessageBoxButton.OK,
+                System.Windows.MessageBoxImage.Information);
+        }).Task.ConfigureAwait(false);
     }
 }

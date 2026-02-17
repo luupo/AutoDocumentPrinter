@@ -27,11 +27,12 @@ public class FileWatcherService : IFileWatcherService
         {
             var watcher = new FileSystemWatcher(workflow.WatchPath)
             {
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime,
+                NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.LastWrite,
                 Filter = "*.*"
             };
 
-            watcher.Created += (_, e) => OnFileCreated(e, workflow);
+            watcher.Created += (_, e) => OnFileDetected(e.Name ?? "", e.FullPath ?? "", workflow);
+            watcher.Renamed += (_, e) => OnFileDetected(e.Name ?? "", e.FullPath ?? "", workflow);
             watcher.EnableRaisingEvents = true;
 
             _watchers[workflow.Id] = watcher;
@@ -66,30 +67,74 @@ public class FileWatcherService : IFileWatcherService
 
     public bool IsWatching(Guid workflowId) => _watchers.ContainsKey(workflowId);
 
-    private async void OnFileCreated(FileSystemEventArgs e, PrintWorkflow workflow)
+    private async void OnFileDetected(string fileName, string fullPath, PrintWorkflow workflow)
     {
-        if (string.IsNullOrWhiteSpace(e.Name))
+        if (string.IsNullOrWhiteSpace(fileName))
             return;
-        if (!MatchesPattern(e.Name, workflow.FilePattern))
+        if (!MatchesPattern(fileName, workflow.FilePattern))
             return;
 
-        // Kurz warten, falls Datei noch geschrieben wird
-        await Task.Delay(500).ConfigureAwait(false);
+        var delayMs = Math.Max(0, workflow.DelaySeconds) * 1000;
+        if (delayMs < 100) delayMs = 100;
+        await Task.Delay(delayMs).ConfigureAwait(false);
 
-        var path = e.FullPath;
-        if (!File.Exists(path))
+        if (!File.Exists(fullPath))
             return;
 
         try
         {
-            var success = await _printService.PrintAsync(path, workflow.PrinterName).ConfigureAwait(false);
+            var success = await _printService.PrintAsync(fullPath, workflow.PrinterName).ConfigureAwait(false);
             System.Diagnostics.Debug.WriteLine(success
-                ? $"Gedruckt: {path} -> {workflow.PrinterName}"
-                : $"Druck fehlgeschlagen: {path}");
+                ? $"Verarbeitet: {fullPath} -> {workflow.PrinterName}"
+                : $"Verarbeitung fehlgeschlagen: {fullPath}");
+            if (success && workflow.PostAction != PostActionType.None)
+                ExecutePostAction(fullPath, workflow);
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"FileWatcherService.OnFileCreated: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"FileWatcherService.OnFileDetected: {ex.Message}");
+        }
+    }
+
+    private static void ExecutePostAction(string filePath, PrintWorkflow workflow)
+    {
+        if (!File.Exists(filePath)) return;
+        try
+        {
+            switch (workflow.PostAction)
+            {
+                case PostActionType.Delete:
+                    File.Delete(filePath);
+                    System.Diagnostics.Debug.WriteLine($"PostAction: Gelöscht {filePath}");
+                    break;
+                case PostActionType.Move:
+                    if (string.IsNullOrWhiteSpace(workflow.MoveToPath) || !Directory.Exists(workflow.MoveToPath))
+                        break;
+                    var destPath = Path.Combine(workflow.MoveToPath.Trim(), Path.GetFileName(filePath));
+                    if (destPath != filePath)
+                    {
+                        if (File.Exists(destPath)) File.Delete(destPath);
+                        File.Move(filePath, destPath);
+                        System.Diagnostics.Debug.WriteLine($"PostAction: Verschoben nach {destPath}");
+                    }
+                    break;
+                case PostActionType.Rename:
+                    if (string.IsNullOrWhiteSpace(workflow.RenameTo)) break;
+                    var dir = Path.GetDirectoryName(filePath);
+                    if (string.IsNullOrEmpty(dir)) break;
+                    var newPath = Path.Combine(dir, workflow.RenameTo.Trim());
+                    if (newPath != filePath)
+                    {
+                        if (File.Exists(newPath)) File.Delete(newPath);
+                        File.Move(filePath, newPath);
+                        System.Diagnostics.Debug.WriteLine($"PostAction: Umbenannt nach {newPath}");
+                    }
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"FileWatcherService.ExecutePostAction: {ex.Message}");
         }
     }
 

@@ -1,0 +1,159 @@
+<Window x:Class="PrintMaster.WorkflowEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:conv="clr-namespace:PrintMaster.Converters"
+        Title="{Binding Title}"
+        Height="520" Width="800"
+        MinHeight="420" MinWidth="640"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResizeWithGrip"
+        Background="#F8F9FA">
+    <Window.Resources>
+        <conv:StringToVisibilityConverter x:Key="StringToVisibility"/>
+        <conv:IntConverter x:Key="IntConverter"/>
+        <conv:EnumEqualsToVisibilityConverter x:Key="EnumEqualsToVisibility"/>
+        <conv:PostActionDisplayConverter x:Key="PostActionDisplay"/>
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="24">
+        <Grid MinWidth="560">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Name -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                <TextBlock Text="Workflow-Name" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                         Padding="10,8" FontSize="14" MinWidth="200"
+                         BorderBrush="#CCC" BorderThickness="1"/>
+            </StackPanel>
+
+            <!-- Pipeline: Ordner → Muster → Drucker → (optional) Nach Aktion -->
+            <Border Grid.Row="1" Background="White" BorderBrush="#DEE2E6" BorderThickness="1"
+                    CornerRadius="4" Padding="16" Margin="0,0,0,16">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.06" Direction="270"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth="160"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" MinWidth="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" MinWidth="140"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" MinWidth="160"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Schritt 1 -->
+                    <Border Grid.Column="0" Background="#E8F4FD" BorderBrush="#0D6EFD" BorderThickness="1"
+                            CornerRadius="6" Padding="12" Margin="0,0,6,0" MinWidth="150">
+                        <StackPanel>
+                            <TextBlock Text="1" FontSize="16" FontWeight="Bold" Foreground="#0D6EFD" Margin="0,0,0,4"/>
+                            <TextBlock Text="Überwachter Ordner" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                            <TextBox Text="{Binding WatchPath, UpdateSourceTrigger=PropertyChanged}"
+                                     IsReadOnly="True" Background="#FFF" Padding="6,4" Margin="0,0,0,6"
+                                     BorderThickness="1" BorderBrush="#CCC" MinHeight="28"/>
+                            <Button Content="Ordner wählen …" Command="{Binding PickFolderCommand}"
+                                    Padding="8,5" HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Grid.Column="1" Text="→" FontSize="20" Foreground="#6C757D"
+                               VerticalAlignment="Center" Margin="2,0"/>
+
+                    <!-- Schritt 2 -->
+                    <Border Grid.Column="2" Background="#FFF3E0" BorderBrush="#FD7E14" BorderThickness="1"
+                            CornerRadius="6" Padding="12" Margin="6,0" MinWidth="120">
+                        <StackPanel>
+                            <TextBlock Text="2" FontSize="16" FontWeight="Bold" Foreground="#FD7E14" Margin="0,0,0,4"/>
+                            <TextBlock Text="Dateimuster" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                            <TextBox Text="{Binding FilePattern, UpdateSourceTrigger=PropertyChanged}"
+                                     Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="#CCC"/>
+                            <TextBlock Text="z. B. *.pdf" FontSize="10" Foreground="#6C757D" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Grid.Column="3" Text="→" FontSize="20" Foreground="#6C757D"
+                               VerticalAlignment="Center" Margin="2,0"/>
+
+                    <!-- Schritt 3 -->
+                    <Border Grid.Column="4" Background="#E8F5E9" BorderBrush="#198754" BorderThickness="1"
+                            CornerRadius="6" Padding="12" Margin="6,0" MinWidth="120">
+                        <StackPanel>
+                            <TextBlock Text="3" FontSize="16" FontWeight="Bold" Foreground="#198754" Margin="0,0,0,4"/>
+                            <TextBlock Text="Ziel-Drucker" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                            <ComboBox ItemsSource="{Binding InstalledPrinters}"
+                                      SelectedItem="{Binding PrinterName, Mode=TwoWay}"
+                                      Padding="6,4" MinHeight="28" IsEditable="False"
+                                      BorderThickness="1" BorderBrush="#CCC"/>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock Grid.Column="5" Text="→" FontSize="20" Foreground="#6C757D"
+                               VerticalAlignment="Center" Margin="2,0"/>
+
+                    <!-- Schritt 4 (optional): Nach der Verarbeitung -->
+                    <Border Grid.Column="6" Background="#F3E5F5" BorderBrush="#6F42C1" BorderThickness="1"
+                            CornerRadius="6" Padding="12" Margin="6,0,0,0" MinWidth="150">
+                        <StackPanel>
+                            <TextBlock Text="4 (optional)" FontSize="16" FontWeight="Bold" Foreground="#6F42C1" Margin="0,0,0,4"/>
+                            <TextBlock Text="Nach Verarbeitung" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                            <ComboBox ItemsSource="{Binding PostActionTypes}" SelectedItem="{Binding PostAction, Mode=TwoWay}"
+                                      Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="#CCC">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource PostActionDisplay}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <!-- Verschieben: Zielordner -->
+                            <StackPanel Margin="0,8,0,0" Visibility="{Binding PostAction, Converter={StaticResource EnumEqualsToVisibility}, ConverterParameter=Move}">
+                                <TextBlock Text="Zielordner:" FontSize="11" Foreground="#555" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding MoveToPath, UpdateSourceTrigger=PropertyChanged}"
+                                         IsReadOnly="True" Background="#FFF" Padding="6,4" Margin="0,0,0,4"
+                                         BorderThickness="1" BorderBrush="#CCC" MinHeight="28"/>
+                                <Button Content="Ordner wählen …" Command="{Binding PickMoveFolderCommand}"
+                                        Padding="6,4" HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+                            <!-- Umbenennen: Neuer Name -->
+                            <StackPanel Margin="0,8,0,0" Visibility="{Binding PostAction, Converter={StaticResource EnumEqualsToVisibility}, ConverterParameter=Rename}">
+                                <TextBlock Text="Neuer Dateiname:" FontSize="11" Foreground="#555" Margin="0,0,0,4"/>
+                                <TextBox Text="{Binding RenameTo, UpdateSourceTrigger=PropertyChanged}"
+                                         Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="#CCC"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Wartezeit + Hinweis -->
+            <StackPanel Grid.Row="2" Margin="0,0,0,12">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                    <TextBlock Text="Wartezeit vor Verarbeitung (Sekunden):" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBox Text="{Binding DelaySeconds, Converter={StaticResource IntConverter}, UpdateSourceTrigger=PropertyChanged}"
+                             Width="60" Padding="6,4" VerticalContentAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Text="Überwachung ist ereignisbasiert: Es wird nicht periodisch geprüft, sondern sofort bei neuer oder umbenannter Datei ausgelöst."
+                           FontSize="11" Foreground="#6C757D" TextWrapping="Wrap"/>
+            </StackPanel>
+
+            <!-- Fehlermeldung -->
+            <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="#DC3545" Margin="0,0,0,8"
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibility}, FallbackValue=Collapsed}"/>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                <Button Content="Abbrechen" Command="{Binding CancelCommand}"
+                        Padding="16,8" Margin="0,0,8,0" IsCancel="True" MinWidth="90"/>
+                <Button Content="Speichern" Command="{Binding SaveCommand}"
+                        Padding="16,8" IsDefault="True" MinWidth="90"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>

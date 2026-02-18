@@ -21,7 +21,6 @@
     <sys:String x:Key="Loc_Settings_Title">Settings</sys:String>
     <sys:String x:Key="Loc_Settings_General">General</sys:String>
     <sys:String x:Key="Loc_Settings_Autostart">Start with Windows (autostart)</sys:String>
-    <sys:String x:Key="Loc_Settings_Theme">Theme:</sys:String>
     <sys:String x:Key="Loc_Settings_Language">Language:</sys:String>
     <sys:String x:Key="Loc_Settings_Ok">OK</sys:String>
 
@@ -50,7 +49,7 @@
     <sys:String x:Key="Loc_We_Step1_Title">Watched folder</sys:String>
     <sys:String x:Key="Loc_We_Step1_Pick">Choose folder…</sys:String>
     <sys:String x:Key="Loc_We_Step2_Title">File pattern</sys:String>
-    <sys:String x:Key="Loc_We_Step2_Hint">e.g. *.pdf or ^Invoice_\d+\.pdf$</sys:String>
+    <sys:String x:Key="Loc_We_Step2_Hint">e.g. *.pdf or ^Invoice_\d+\.pdf$ – multiple patterns: one per line.</sys:String>
     <sys:String x:Key="Loc_We_Step2_Regex">Use regular expression (Regex)</sys:String>
     <sys:String x:Key="Loc_We_Step3_Title">Target printer</sys:String>
     <sys:String x:Key="Loc_We_Step4_Title">After processing</sys:String>
@@ -102,5 +101,20 @@
     <sys:String x:Key="Loc_TestPrinterName">Test mode</sys:String>
     <sys:String x:Key="Loc_Test_Title">PrintMaster – Test mode</sys:String>
     <sys:String x:Key="Loc_Test_Body">The workflow was triggered.\n\nFile: {0}\n\nTest mode is still enabled.</sys:String>
+
+    <!-- Backup -->
+    <sys:String x:Key="Loc_Backup_Button_Create">Create backup</sys:String>
+    <sys:String x:Key="Loc_Backup_Button_Restore">Restore backup</sys:String>
+    <sys:String x:Key="Loc_Backup_Created">Backup created:\n{0}</sys:String>
+    <sys:String x:Key="Loc_Backup_CreateFailed">Backup could not be created:\n{0}</sys:String>
+    <sys:String x:Key="Loc_Backup_OpenDialogTitle">Select backup file</sys:String>
+    <sys:String x:Key="Loc_Backup_Restored">Backup has been restored.\nPlease restart PrintMaster so all settings are applied.</sys:String>
+    <sys:String x:Key="Loc_Backup_RestoreFailed">Backup could not be restored:\n{0}</sys:String>
+
+    <!-- Pattern assistant -->
+    <sys:String x:Key="Loc_PatternAssist_Title">Pattern assistant</sys:String>
+    <sys:String x:Key="Loc_PatternAssist_Button">Pattern assistant…</sys:String>
+    <sys:String x:Key="Loc_PatternAssist_NoResult">No useful common pattern could be found for the selected files.</sys:String>
+    <sys:String x:Key="Loc_PatternAssist_Result">Suggested pattern:\n{0}</sys:String>
 </ResourceDictionary>
 

@@ -174,22 +174,42 @@ public class FileWatcherService : IFileWatcherService
         if (string.IsNullOrWhiteSpace(pattern))
             return true;
 
+        var parts = pattern
+            .Split(new[] { '\r', '\n', ';' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(p => p.Trim())
+            .Where(p => p.Length > 0)
+            .ToList();
+
+        if (parts.Count == 0)
+            return true;
+
         if (useRegex)
         {
-            try
+            foreach (var part in parts)
             {
-                return System.Text.RegularExpressions.Regex.IsMatch(fileName, pattern);
+                try
+                {
+                    if (System.Text.RegularExpressions.Regex.IsMatch(fileName, part))
+                        return true;
+                }
+                catch (ArgumentException)
+                {
+                    // Ungültiges Pattern ignorieren
+                }
             }
-            catch (ArgumentException)
-            {
-                return false;
-            }
+            return false;
         }
 
-        var regexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(pattern)
-            .Replace("\\*", ".*")
-            .Replace("\\?", ".") + "$";
+        foreach (var part in parts)
+        {
+            var regexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(part)
+                .Replace("\\*", ".*")
+                .Replace("\\?", ".") + "$";
 
-        return System.Text.RegularExpressions.Regex.IsMatch(fileName, regexPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            if (System.Text.RegularExpressions.Regex.IsMatch(fileName, regexPattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                return true;
+        }
+
+        return false;
     }
 }

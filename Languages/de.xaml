@@ -21,7 +21,6 @@
     <sys:String x:Key="Loc_Settings_Title">Einstellungen</sys:String>
     <sys:String x:Key="Loc_Settings_General">Allgemein</sys:String>
     <sys:String x:Key="Loc_Settings_Autostart">Mit Windows starten (Autostart)</sys:String>
-    <sys:String x:Key="Loc_Settings_Theme">Design:</sys:String>
     <sys:String x:Key="Loc_Settings_Language">Sprache:</sys:String>
     <sys:String x:Key="Loc_Settings_Ok">OK</sys:String>
 
@@ -50,7 +49,7 @@
     <sys:String x:Key="Loc_We_Step1_Title">Überwachter Ordner</sys:String>
     <sys:String x:Key="Loc_We_Step1_Pick">Ordner wählen …</sys:String>
     <sys:String x:Key="Loc_We_Step2_Title">Dateimuster</sys:String>
-    <sys:String x:Key="Loc_We_Step2_Hint">z. B. *.pdf oder ^Rechnung_\d+\.pdf$</sys:String>
+    <sys:String x:Key="Loc_We_Step2_Hint">z. B. *.pdf oder ^Rechnung_\d+\.pdf$ – mehrere Muster: eines pro Zeile.</sys:String>
     <sys:String x:Key="Loc_We_Step2_Regex">Als regulären Ausdruck (Regex) verwenden</sys:String>
     <sys:String x:Key="Loc_We_Step3_Title">Ziel-Drucker</sys:String>
     <sys:String x:Key="Loc_We_Step4_Title">Nach Verarbeitung</sys:String>
@@ -102,5 +101,20 @@
     <sys:String x:Key="Loc_TestPrinterName">Testmodus</sys:String>
     <sys:String x:Key="Loc_Test_Title">PrintMaster – Testmodus</sys:String>
     <sys:String x:Key="Loc_Test_Body">Der Workflow wurde ausgelöst.\n\nDatei: {0}\n\nEs ist noch der Testmodus eingestellt.</sys:String>
+
+    <!-- Backup -->
+    <sys:String x:Key="Loc_Backup_Button_Create">Backup erstellen</sys:String>
+    <sys:String x:Key="Loc_Backup_Button_Restore">Backup wiederherstellen</sys:String>
+    <sys:String x:Key="Loc_Backup_Created">Backup wurde erstellt:\n{0}</sys:String>
+    <sys:String x:Key="Loc_Backup_CreateFailed">Backup konnte nicht erstellt werden:\n{0}</sys:String>
+    <sys:String x:Key="Loc_Backup_OpenDialogTitle">Backup-Datei auswählen</sys:String>
+    <sys:String x:Key="Loc_Backup_Restored">Backup wurde wiederhergestellt.\nBitte PrintMaster neu starten, damit alle Einstellungen übernommen werden.</sys:String>
+    <sys:String x:Key="Loc_Backup_RestoreFailed">Backup konnte nicht wiederhergestellt werden:\n{0}</sys:String>
+
+    <!-- Pattern-Assistent -->
+    <sys:String x:Key="Loc_PatternAssist_Title">Muster-Assistent</sys:String>
+    <sys:String x:Key="Loc_PatternAssist_Button">Muster-Assistent…</sys:String>
+    <sys:String x:Key="Loc_PatternAssist_NoResult">Für die ausgewählten Dateien konnte kein gemeinsames Muster gefunden werden.</sys:String>
+    <sys:String x:Key="Loc_PatternAssist_Result">Vorgeschlagenes Muster:\n{0}</sys:String>
 </ResourceDictionary>
 

@@ -13,6 +13,7 @@
         <conv:IntConverter x:Key="IntConverter"/>
         <conv:EnumEqualsToVisibilityConverter x:Key="EnumEqualsToVisibility"/>
         <conv:PostActionDisplayConverter x:Key="PostActionDisplay"/>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
     </Window.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="24">
         <Grid MinWidth="560">
@@ -85,9 +86,37 @@
                         <StackPanel>
                             <TextBlock Text="2" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource Step2Accent}" Margin="0,0,0,4"/>
                             <TextBlock Text="{DynamicResource Loc_We_Step2_Title}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,6"/>
-                            <TextBox Text="{Binding FilePattern, UpdateSourceTrigger=PropertyChanged}"
-                                     Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource InputBackground}" Foreground="{DynamicResource TextPrimary}"/>
+
+                            <!-- Patterns -->
+                            <ItemsControl ItemsSource="{Binding Patterns}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,6">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Grid.Column="0"
+                                                     Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                                                     Padding="6,4" MinHeight="28" BorderThickness="1"
+                                                     BorderBrush="{DynamicResource BorderBrush}"
+                                                     Background="{DynamicResource InputBackground}"
+                                                     Foreground="{DynamicResource TextPrimary}"
+                                                     GotFocus="PatternTextBox_GotFocus"/>
+                                            <Button Grid.Column="1" Content="X"
+                                                    Margin="4,0,0,0"
+                                                    Visibility="{Binding IsRemovable, Converter={StaticResource BoolToVisibility}}"
+                                                    Command="{Binding DataContext.RemovePatternCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button Content="{DynamicResource Loc_PatternAssist_Button}" Command="{Binding SuggestPatternCommand}" Margin="0,4,0,0"/>
+                            <Button Content="+" Command="{Binding AddPatternCommand}" Margin="0,4,0,0" Width="24" HorizontalAlignment="Left"/>
+
                             <TextBlock Text="{DynamicResource Loc_We_Step2_Hint}" FontSize="10" Foreground="{DynamicResource TextMuted}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+
                             <CheckBox Content="{DynamicResource Loc_We_Step2_Regex}" IsChecked="{Binding UseRegexPattern}"
                                       Foreground="{DynamicResource TextPrimary}" Margin="0,6,0,0" FontSize="10"/>
                         </StackPanel>

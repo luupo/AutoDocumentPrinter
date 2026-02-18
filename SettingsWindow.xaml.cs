@@ -9,7 +9,7 @@ public partial class SettingsWindow : Window
     public SettingsWindow()
     {
         InitializeComponent();
-        DataContext = new SettingsViewModel(new AutostartService());
+        DataContext = new SettingsViewModel(new AutostartService(), new BackupService());
     }
 
     private void OkButton_Click(object sender, RoutedEventArgs e)

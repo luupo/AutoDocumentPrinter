@@ -112,4 +112,12 @@ public partial class WorkflowEditorWindow : Window
         }
         catch { /* ignore */ }
     }
+
+    private void PatternTextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.TextBox tb) return;
+        if (tb.DataContext is not PatternItem item) return;
+        if (DataContext is WorkflowEditorViewModel vm)
+            vm.SetActivePattern(item);
+    }
 }

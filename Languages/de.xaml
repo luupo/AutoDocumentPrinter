@@ -1,0 +1,106 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+    <!-- Main -->
+    <sys:String x:Key="Loc_Main_Title">PrintMaster – Workflows</sys:String>
+    <sys:String x:Key="Loc_Main_Header">PrintMaster</sys:String>
+    <sys:String x:Key="Loc_Col_Active">Aktiv</sys:String>
+    <sys:String x:Key="Loc_Col_Name">Name</sys:String>
+    <sys:String x:Key="Loc_Col_Folder">Ordner</sys:String>
+    <sys:String x:Key="Loc_Col_Pattern">Muster</sys:String>
+    <sys:String x:Key="Loc_Col_Printer">Drucker</sys:String>
+    <sys:String x:Key="Loc_Btn_NewWorkflow">Neuer Workflow</sys:String>
+    <sys:String x:Key="Loc_Btn_Edit">Bearbeiten</sys:String>
+    <sys:String x:Key="Loc_Btn_Duplicate">Duplizieren</sys:String>
+    <sys:String x:Key="Loc_Btn_Delete">Löschen</sys:String>
+    <sys:String x:Key="Loc_Btn_Log">Log</sys:String>
+    <sys:String x:Key="Loc_Btn_RefreshPrinters">Drucker aktualisieren</sys:String>
+    <sys:String x:Key="Loc_Btn_Settings">Einstellungen</sys:String>
+
+    <!-- Settings -->
+    <sys:String x:Key="Loc_Settings_Title">Einstellungen</sys:String>
+    <sys:String x:Key="Loc_Settings_General">Allgemein</sys:String>
+    <sys:String x:Key="Loc_Settings_Autostart">Mit Windows starten (Autostart)</sys:String>
+    <sys:String x:Key="Loc_Settings_Theme">Design:</sys:String>
+    <sys:String x:Key="Loc_Settings_Language">Sprache:</sys:String>
+    <sys:String x:Key="Loc_Settings_Ok">OK</sys:String>
+
+    <sys:String x:Key="Loc_Theme_Light">Hell</sys:String>
+    <sys:String x:Key="Loc_Theme_Dark">Dunkel</sys:String>
+    <sys:String x:Key="Loc_Theme_System">System (Windows)</sys:String>
+
+    <sys:String x:Key="Loc_Lang_System">System (automatisch)</sys:String>
+    <sys:String x:Key="Loc_Lang_English">Englisch</sys:String>
+    <sys:String x:Key="Loc_Lang_German">Deutsch</sys:String>
+
+    <!-- Log -->
+    <sys:String x:Key="Loc_Log_Title">PrintMaster – Log</sys:String>
+    <sys:String x:Key="Loc_Log_Header">Letzte Verarbeitungen (Erfolg und Fehler)</sys:String>
+    <sys:String x:Key="Loc_Log_Col_Time">Zeit</sys:String>
+    <sys:String x:Key="Loc_Log_Col_Workflow">Workflow</sys:String>
+    <sys:String x:Key="Loc_Log_Col_File">Datei</sys:String>
+    <sys:String x:Key="Loc_Log_Col_Success">Erfolg</sys:String>
+    <sys:String x:Key="Loc_Log_Col_Message">Meldung</sys:String>
+
+    <!-- Workflow editor -->
+    <sys:String x:Key="Loc_We_Label_Name">Workflow-Name</sys:String>
+    <sys:String x:Key="Loc_We_Check_Enabled">Workflow ist aktiv (Überwachung und Druck)</sys:String>
+    <sys:String x:Key="Loc_We_Hint_Dnd1">Datei hier in die Pipeline ziehen → Ordner und Dateiname werden übernommen. </sys:String>
+    <sys:String x:Key="Loc_We_Hint_Dnd2">Ersetzen Sie den veränderlichen Teil durch * (z. B. Rechnung_*.pdf).</sys:String>
+    <sys:String x:Key="Loc_We_Step1_Title">Überwachter Ordner</sys:String>
+    <sys:String x:Key="Loc_We_Step1_Pick">Ordner wählen …</sys:String>
+    <sys:String x:Key="Loc_We_Step2_Title">Dateimuster</sys:String>
+    <sys:String x:Key="Loc_We_Step2_Hint">z. B. *.pdf oder ^Rechnung_\d+\.pdf$</sys:String>
+    <sys:String x:Key="Loc_We_Step2_Regex">Als regulären Ausdruck (Regex) verwenden</sys:String>
+    <sys:String x:Key="Loc_We_Step3_Title">Ziel-Drucker</sys:String>
+    <sys:String x:Key="Loc_We_Step4_Title">Nach Verarbeitung</sys:String>
+    <sys:String x:Key="Loc_We_Move_Target">Zielordner:</sys:String>
+    <sys:String x:Key="Loc_We_Rename_New">Neuer Dateiname:</sys:String>
+    <sys:String x:Key="Loc_We_Delay_Label">Wartezeit vor Verarbeitung (Sekunden):</sys:String>
+    <sys:String x:Key="Loc_We_Delay_Hint">Überwachung ist ereignisbasiert: Es wird nicht periodisch geprüft, sondern sofort bei neuer oder umbenannter Datei ausgelöst.</sys:String>
+    <sys:String x:Key="Loc_We_Btn_Cancel">Abbrechen</sys:String>
+    <sys:String x:Key="Loc_We_Btn_Save">Speichern</sys:String>
+
+    <!-- Post actions -->
+    <sys:String x:Key="Loc_Post_None">Keine Aktion</sys:String>
+    <sys:String x:Key="Loc_Post_Delete">Datei löschen</sys:String>
+    <sys:String x:Key="Loc_Post_Move">In Ordner verschieben</sys:String>
+    <sys:String x:Key="Loc_Post_Rename">Datei umbenennen</sys:String>
+
+    <!-- Tray -->
+    <sys:String x:Key="Loc_Tray_Tooltip">PrintMaster – Klicken zum Öffnen</sys:String>
+    <sys:String x:Key="Loc_Tray_Open">Fenster öffnen</sys:String>
+    <sys:String x:Key="Loc_Tray_Settings">Einstellungen</sys:String>
+    <sys:String x:Key="Loc_Tray_Log">Log anzeigen</sys:String>
+    <sys:String x:Key="Loc_Tray_Exit">Beenden</sys:String>
+    <sys:String x:Key="Loc_Tray_MinTitle">PrintMaster</sys:String>
+    <sys:String x:Key="Loc_Tray_MinText">In Tray minimiert. Doppelklick zum Öffnen.</sys:String>
+    <sys:String x:Key="Loc_Tray_FailTitle">PrintMaster – Druckfehler</sys:String>
+    <sys:String x:Key="Loc_Tray_FailText">Workflow "{0}": Druck fehlgeschlagen.\n{1}</sys:String>
+
+    <!-- Messages -->
+    <sys:String x:Key="Loc_Msg_SelectWorkflow">Bitte einen Workflow auswählen.</sys:String>
+    <sys:String x:Key="Loc_Msg_WorkflowEnabled">Workflow "{0}" aktiviert.</sys:String>
+    <sys:String x:Key="Loc_Msg_WorkflowDisabled">Workflow "{0}" deaktiviert.</sys:String>
+    <sys:String x:Key="Loc_Msg_WorkflowCreated">Workflow "{0}" erstellt. Bitte ggf. anpassen und aktivieren.</sys:String>
+    <sys:String x:Key="Loc_Msg_WorkflowAdded">Workflow "{0}" hinzugefügt.</sys:String>
+    <sys:String x:Key="Loc_Msg_WorkflowUpdated">Workflow "{0}" aktualisiert.</sys:String>
+    <sys:String x:Key="Loc_Msg_WorkflowDeleted">Workflow gelöscht.</sys:String>
+    <sys:String x:Key="Loc_Msg_SaveFailed">Speichern fehlgeschlagen: {0}</sys:String>
+    <sys:String x:Key="Loc_CopyPrefix">Kopie von </sys:String>
+
+    <!-- Workflow editor validation -->
+    <sys:String x:Key="Loc_We_Err_Name">Bitte einen Namen eingeben.</sys:String>
+    <sys:String x:Key="Loc_We_Err_Folder">Bitte einen gültigen Ordner auswählen.</sys:String>
+    <sys:String x:Key="Loc_We_Err_Printer">Bitte einen Drucker auswählen.</sys:String>
+    <sys:String x:Key="Loc_We_Err_MoveFolder">Bitte einen gültigen Zielordner für "Verschieben" auswählen.</sys:String>
+    <sys:String x:Key="Loc_We_Err_Rename">Bitte einen neuen Dateinamen für "Umbenennen" eingeben.</sys:String>
+    <sys:String x:Key="Loc_We_Dialog_PickWatch">Ordner für die Überwachung auswählen</sys:String>
+    <sys:String x:Key="Loc_We_Dialog_PickMove">Zielordner zum Verschieben auswählen</sys:String>
+
+    <!-- Test mode -->
+    <sys:String x:Key="Loc_TestPrinterName">Testmodus</sys:String>
+    <sys:String x:Key="Loc_Test_Title">PrintMaster – Testmodus</sys:String>
+    <sys:String x:Key="Loc_Test_Body">Der Workflow wurde ausgelöst.\n\nDatei: {0}\n\nEs ist noch der Testmodus eingestellt.</sys:String>
+</ResourceDictionary>
+

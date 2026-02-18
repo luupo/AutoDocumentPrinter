@@ -7,7 +7,7 @@
         MinHeight="420" MinWidth="640"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResizeWithGrip"
-        Background="#F8F9FA">
+        Background="{DynamicResource WindowBackground}">
     <Window.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibility"/>
         <conv:IntConverter x:Key="IntConverter"/>
@@ -28,23 +28,24 @@
 
             <!-- Name + Aktiv -->
             <StackPanel Grid.Row="0" Margin="0,0,0,16">
-                <TextBlock Text="Workflow-Name" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                <TextBlock Text="{DynamicResource Loc_We_Label_Name}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,6"/>
                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                          Padding="10,8" FontSize="14" MinWidth="200"
-                         BorderBrush="#CCC" BorderThickness="1"/>
-                <CheckBox Content="Workflow ist aktiv (Überwachung und Druck)" IsChecked="{Binding IsEnabled}"
-                          Margin="0,10,0,0"/>
+                         BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource InputBackground}" Foreground="{DynamicResource TextPrimary}"
+                         BorderThickness="1"/>
+                <CheckBox Content="{DynamicResource Loc_We_Check_Enabled}" IsChecked="{Binding IsEnabled}"
+                          Foreground="{DynamicResource TextPrimary}" Margin="0,10,0,0"/>
             </StackPanel>
 
             <!-- Hinweis: Drag & Drop -->
-            <TextBlock Grid.Row="1" Margin="0,0,0,6" FontSize="11" Foreground="#6C757D" TextWrapping="Wrap">
-                <Run Text="Datei hier in die Pipeline ziehen → Ordner und Dateiname werden übernommen. "/>
-                <Run Text="Ersetzen Sie den veränderlichen Teil durch * (z. B. Rechnung_*.pdf)." FontWeight="SemiBold"/>
+            <TextBlock Grid.Row="1" Margin="0,0,0,6" FontSize="11" Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap">
+                <Run Text="{DynamicResource Loc_We_Hint_Dnd1}"/>
+                <Run Text="{DynamicResource Loc_We_Hint_Dnd2}" FontWeight="SemiBold"/>
             </TextBlock>
 
             <!-- Pipeline: Ordner → Muster → Drucker → (optional) Nach Aktion (Drop-Ziel) -->
             <Border Grid.Row="2" x:Name="PipelineDropTarget" AllowDrop="True"
-                    Background="White" BorderBrush="#DEE2E6" BorderThickness="1"
+                    Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
                     CornerRadius="4" Padding="16" Margin="0,0,0,16"
                     DragOver="PipelineDropTarget_DragOver" Drop="PipelineDropTarget_Drop">
                 <Border.Effect>
@@ -62,83 +63,89 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Schritt 1 -->
-                    <Border Grid.Column="0" Background="#E8F4FD" BorderBrush="#0D6EFD" BorderThickness="1"
+                    <Border Grid.Column="0" Background="{DynamicResource Step1Background}" BorderBrush="{DynamicResource Step1Border}" BorderThickness="1"
                             CornerRadius="6" Padding="12" Margin="0,0,6,0" MinWidth="150">
                         <StackPanel>
-                            <TextBlock Text="1" FontSize="16" FontWeight="Bold" Foreground="#0D6EFD" Margin="0,0,0,4"/>
-                            <TextBlock Text="Überwachter Ordner" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                            <TextBlock Text="1" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource Step1Accent}" Margin="0,0,0,4"/>
+                            <TextBlock Text="{DynamicResource Loc_We_Step1_Title}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,6"/>
                             <TextBox Text="{Binding WatchPath, UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True" Background="#FFF" Padding="6,4" Margin="0,0,0,6"
-                                     BorderThickness="1" BorderBrush="#CCC" MinHeight="28"/>
-                            <Button Content="Ordner wählen …" Command="{Binding PickFolderCommand}"
+                                     IsReadOnly="True" Background="{DynamicResource InputBackground}" Foreground="{DynamicResource TextPrimary}" Padding="6,4" Margin="0,0,0,6"
+                                     BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" MinHeight="28"/>
+                            <Button Content="{DynamicResource Loc_We_Step1_Pick}" Command="{Binding PickFolderCommand}"
                                     Padding="8,5" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
 
-                    <TextBlock Grid.Column="1" Text="→" FontSize="20" Foreground="#6C757D"
+                    <TextBlock Grid.Column="1" Text="→" FontSize="20" Foreground="{DynamicResource TextMuted}"
                                VerticalAlignment="Center" Margin="2,0"/>
 
                     <!-- Schritt 2 -->
-                    <Border Grid.Column="2" Background="#FFF3E0" BorderBrush="#FD7E14" BorderThickness="1"
+                    <Border Grid.Column="2" Background="{DynamicResource Step2Background}" BorderBrush="{DynamicResource Step2Border}" BorderThickness="1"
                             CornerRadius="6" Padding="12" Margin="6,0" MinWidth="120">
                         <StackPanel>
-                            <TextBlock Text="2" FontSize="16" FontWeight="Bold" Foreground="#FD7E14" Margin="0,0,0,4"/>
-                            <TextBlock Text="Dateimuster" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                            <TextBlock Text="2" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource Step2Accent}" Margin="0,0,0,4"/>
+                            <TextBlock Text="{DynamicResource Loc_We_Step2_Title}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,6"/>
                             <TextBox Text="{Binding FilePattern, UpdateSourceTrigger=PropertyChanged}"
-                                     Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="#CCC"/>
-                            <TextBlock Text="z. B. *.pdf oder ^Rechnung_\d+\.pdf$" FontSize="10" Foreground="#6C757D" Margin="0,4,0,0" TextWrapping="Wrap"/>
-                            <CheckBox Content="Als regulären Ausdruck (Regex) verwenden" IsChecked="{Binding UseRegexPattern}"
-                                      Margin="0,6,0,0" FontSize="10"/>
+                                     Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource InputBackground}" Foreground="{DynamicResource TextPrimary}"/>
+                            <TextBlock Text="{DynamicResource Loc_We_Step2_Hint}" FontSize="10" Foreground="{DynamicResource TextMuted}" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                            <CheckBox Content="{DynamicResource Loc_We_Step2_Regex}" IsChecked="{Binding UseRegexPattern}"
+                                      Foreground="{DynamicResource TextPrimary}" Margin="0,6,0,0" FontSize="10"/>
                         </StackPanel>
                     </Border>
 
-                    <TextBlock Grid.Column="3" Text="→" FontSize="20" Foreground="#6C757D"
+                    <TextBlock Grid.Column="3" Text="→" FontSize="20" Foreground="{DynamicResource TextMuted}"
                                VerticalAlignment="Center" Margin="2,0"/>
 
                     <!-- Schritt 3 -->
-                    <Border Grid.Column="4" Background="#E8F5E9" BorderBrush="#198754" BorderThickness="1"
+                    <Border Grid.Column="4" Background="{DynamicResource Step3Background}" BorderBrush="{DynamicResource Step3Border}" BorderThickness="1"
                             CornerRadius="6" Padding="12" Margin="6,0" MinWidth="120">
                         <StackPanel>
-                            <TextBlock Text="3" FontSize="16" FontWeight="Bold" Foreground="#198754" Margin="0,0,0,4"/>
-                            <TextBlock Text="Ziel-Drucker" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                            <TextBlock Text="3" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource Step3Accent}" Margin="0,0,0,4"/>
+                            <TextBlock Text="{DynamicResource Loc_We_Step3_Title}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,6"/>
                             <ComboBox ItemsSource="{Binding InstalledPrinters}"
                                       SelectedItem="{Binding PrinterName, Mode=TwoWay}"
                                       Padding="6,4" MinHeight="28" IsEditable="False"
-                                      BorderThickness="1" BorderBrush="#CCC"/>
+                                      BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource InputBackground}" Foreground="{DynamicResource TextPrimary}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Foreground="{DynamicResource TextPrimary}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </StackPanel>
                     </Border>
 
-                    <TextBlock Grid.Column="5" Text="→" FontSize="20" Foreground="#6C757D"
+                    <TextBlock Grid.Column="5" Text="→" FontSize="20" Foreground="{DynamicResource TextMuted}"
                                VerticalAlignment="Center" Margin="2,0"/>
 
                     <!-- Schritt 4 (optional): Nach der Verarbeitung -->
-                    <Border Grid.Column="6" Background="#F3E5F5" BorderBrush="#6F42C1" BorderThickness="1"
+                    <Border Grid.Column="6" Background="{DynamicResource Step4Background}" BorderBrush="{DynamicResource Step4Border}" BorderThickness="1"
                             CornerRadius="6" Padding="12" Margin="6,0,0,0" MinWidth="150">
                         <StackPanel>
-                            <TextBlock Text="4 (optional)" FontSize="16" FontWeight="Bold" Foreground="#6F42C1" Margin="0,0,0,4"/>
-                            <TextBlock Text="Nach Verarbeitung" FontWeight="SemiBold" Foreground="#333" Margin="0,0,0,6"/>
+                            <TextBlock Text="4 (optional)" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource Step4Accent}" Margin="0,0,0,4"/>
+                            <TextBlock Text="{DynamicResource Loc_We_Step4_Title}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,6"/>
                             <ComboBox ItemsSource="{Binding PostActionTypes}" SelectedItem="{Binding PostAction, Mode=TwoWay}"
-                                      Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="#CCC">
+                                      Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource InputBackground}" Foreground="{DynamicResource TextPrimary}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource PostActionDisplay}}"/>
+                                        <TextBlock Text="{Binding Converter={StaticResource PostActionDisplay}}" Foreground="{DynamicResource TextPrimary}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                             <!-- Verschieben: Zielordner -->
                             <StackPanel Margin="0,8,0,0" Visibility="{Binding PostAction, Converter={StaticResource EnumEqualsToVisibility}, ConverterParameter=Move}">
-                                <TextBlock Text="Zielordner:" FontSize="11" Foreground="#555" Margin="0,0,0,4"/>
+                                <TextBlock Text="{DynamicResource Loc_We_Move_Target}" FontSize="11" Foreground="{DynamicResource TextSecondary}" Margin="0,0,0,4"/>
                                 <TextBox Text="{Binding MoveToPath, UpdateSourceTrigger=PropertyChanged}"
-                                         IsReadOnly="True" Background="#FFF" Padding="6,4" Margin="0,0,0,4"
-                                         BorderThickness="1" BorderBrush="#CCC" MinHeight="28"/>
-                                <Button Content="Ordner wählen …" Command="{Binding PickMoveFolderCommand}"
+                                         IsReadOnly="True" Background="{DynamicResource InputBackground}" Foreground="{DynamicResource TextPrimary}" Padding="6,4" Margin="0,0,0,4"
+                                         BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" MinHeight="28"/>
+                                <Button Content="{DynamicResource Loc_We_Step1_Pick}" Command="{Binding PickMoveFolderCommand}"
                                         Padding="6,4" HorizontalAlignment="Stretch"/>
                             </StackPanel>
                             <!-- Umbenennen: Neuer Name -->
                             <StackPanel Margin="0,8,0,0" Visibility="{Binding PostAction, Converter={StaticResource EnumEqualsToVisibility}, ConverterParameter=Rename}">
-                                <TextBlock Text="Neuer Dateiname:" FontSize="11" Foreground="#555" Margin="0,0,0,4"/>
+                                <TextBlock Text="{DynamicResource Loc_We_Rename_New}" FontSize="11" Foreground="{DynamicResource TextSecondary}" Margin="0,0,0,4"/>
                                 <TextBox Text="{Binding RenameTo, UpdateSourceTrigger=PropertyChanged}"
-                                         Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="#CCC"/>
+                                         Padding="6,4" MinHeight="28" BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource InputBackground}" Foreground="{DynamicResource TextPrimary}"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -148,23 +155,24 @@
             <!-- Wartezeit + Hinweis -->
             <StackPanel Grid.Row="3" Margin="0,0,0,12">
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
-                    <TextBlock Text="Wartezeit vor Verarbeitung (Sekunden):" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock Text="{DynamicResource Loc_We_Delay_Label}" VerticalAlignment="Center" Foreground="{DynamicResource TextPrimary}" Margin="0,0,8,0"/>
                     <TextBox Text="{Binding DelaySeconds, Converter={StaticResource IntConverter}, UpdateSourceTrigger=PropertyChanged}"
-                             Width="60" Padding="6,4" VerticalContentAlignment="Center"/>
+                             Width="60" Padding="6,4" VerticalContentAlignment="Center"
+                             Background="{DynamicResource InputBackground}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource BorderBrush}"/>
                 </StackPanel>
-                <TextBlock Text="Überwachung ist ereignisbasiert: Es wird nicht periodisch geprüft, sondern sofort bei neuer oder umbenannter Datei ausgelöst."
-                           FontSize="11" Foreground="#6C757D" TextWrapping="Wrap"/>
+                <TextBlock Text="{DynamicResource Loc_We_Delay_Hint}"
+                           FontSize="11" Foreground="{DynamicResource TextMuted}" TextWrapping="Wrap"/>
             </StackPanel>
 
             <!-- Fehlermeldung -->
-            <TextBlock Grid.Row="4" Text="{Binding ErrorMessage}" Foreground="#DC3545" Margin="0,0,0,8"
+            <TextBlock Grid.Row="4" Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}" Margin="0,0,0,8"
                        Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibility}, FallbackValue=Collapsed}"/>
 
             <!-- Buttons -->
             <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
-                <Button Content="Abbrechen" Command="{Binding CancelCommand}"
+                <Button Content="{DynamicResource Loc_We_Btn_Cancel}" Command="{Binding CancelCommand}"
                         Padding="16,8" Margin="0,0,8,0" IsCancel="True" MinWidth="90"/>
-                <Button Content="Speichern" Command="{Binding SaveCommand}"
+                <Button Content="{DynamicResource Loc_We_Btn_Save}" Command="{Binding SaveCommand}"
                         Padding="16,8" IsDefault="True" MinWidth="90"/>
             </StackPanel>
         </Grid>

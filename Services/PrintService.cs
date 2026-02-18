@@ -5,7 +5,8 @@ namespace PrintMaster.Services;
 
 public class PrintService : IPrintService
 {
-    private const string TestmodusPrinterName = "Testmodus";
+    private const string TestmodusPrinterNameDe = "Testmodus";
+    private const string TestmodusPrinterNameEn = "Test mode";
 
     public async Task<bool> PrintAsync(string filePath, string printerName, CancellationToken cancellationToken = default)
     {
@@ -14,7 +15,7 @@ public class PrintService : IPrintService
         if (string.IsNullOrWhiteSpace(printerName))
             return false;
 
-        if (string.Equals(printerName, TestmodusPrinterName, StringComparison.OrdinalIgnoreCase))
+        if (IsTestPrinter(printerName))
         {
             await ShowTestmodusMessageAsync(filePath).ConfigureAwait(false);
             return true;
@@ -69,10 +70,20 @@ public class PrintService : IPrintService
         await dispatcher.InvokeAsync(() =>
         {
             System.Windows.MessageBox.Show(
-                $"Der Workflow wurde ausgelöst.\n\nDatei: {filePath}\n\nEs ist noch der Testmodus eingestellt.",
-                "PrintMaster – Testmodus",
+                LocalizationService.F("Loc_Test_Body", filePath),
+                LocalizationService.T("Loc_Test_Title"),
                 System.Windows.MessageBoxButton.OK,
                 System.Windows.MessageBoxImage.Information);
         }).Task.ConfigureAwait(false);
+    }
+
+    private static bool IsTestPrinter(string printerName)
+    {
+        if (string.IsNullOrWhiteSpace(printerName)) return false;
+        // Akzeptiere sowohl aktuellen (lokalisierten) Namen als auch die alte DE-Variante.
+        var current = LocalizationService.T("Loc_TestPrinterName");
+        return string.Equals(printerName, current, StringComparison.OrdinalIgnoreCase)
+               || string.Equals(printerName, TestmodusPrinterNameDe, StringComparison.OrdinalIgnoreCase)
+               || string.Equals(printerName, TestmodusPrinterNameEn, StringComparison.OrdinalIgnoreCase);
     }
 }

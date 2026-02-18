@@ -31,6 +31,19 @@
 - **Wiederholung bei Fehler:** Bei Druckfehler automatisch erneut versuchen (Anzahl/Intervall konfigurierbar).
 - **Unterordner:** Überwachung auch in Unterordnern (rekursiv) optional pro Workflow.
 - **Beim Start minimiert:** Option in den Einstellungen: App startet direkt in die Tray-Leiste.
+- **Mehrere Dateimuster pro Workflow:** Liste von Patterns inkl. optionaler Ausschlussmuster.
+- **Workflow-Prioritäten:** Reihenfolge/Ranking, falls mehrere Workflows auf dieselbe Datei passen.
+- **Wartezeit bis Datei „stabil“ ist:** Zusatz-Option, dass die Datei X Sekunden unverändert sein muss, bevor gedruckt wird.
+- **Konfliktbehandlung bei Ziel-Dateien:** Verhalten konfigurierbar (überschreiben, umbenennen, überspringen).
+- **Wiederholversuche im Detail:** Konfigurierbare Anzahl/Wartezeit und Quarantäne-Ordner für dauerhaft fehlgeschlagene Drucke.
+- **Quarantäne-Ordner:** Option, fehlerhafte Dateien in einen speziellen Fehler-Ordner zu verschieben.
+- **Filter/Search im Log:** Nach Datum, Workflow, Erfolg/Fehler, Dateiname usw. filtern.
+- **Log-Export:** Verlauf als CSV/JSON exportieren (z. B. zur Analyse oder für den Support).
+- **Ruhiger Modus:** Benachrichtigungen nur bei Fehlern oder komplett stumm schalten.
+- **Tray-Schnellaktionen:** Im Tray-Kontextmenü Workflows pausieren/fortsetzen oder „Letzten Fehler anzeigen“.
+- **Setup-Assistent für neue Workflows:** Vordefinierte Vorlagen (z. B. Standard-PDF-Workflow für Ordner X).
+- **Konfig-Schutz:** Option, Konfiguration per Passwort zu sperren (Nur-Lesen-Modus für produktive Installationen).
+- **Konfigurations-Import/-Export mit Passwort:** Verschlüsselte JSON-Datei für die gesamte App-Konfiguration.
 
 ---
 

@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
 using PrintMaster.Models;
+using PrintMaster.Services;
 
 namespace PrintMaster.ViewModels;
 
@@ -136,7 +137,7 @@ public class WorkflowEditorViewModel : ViewModelBase
     {
         var dialog = new System.Windows.Forms.FolderBrowserDialog
         {
-            Description = "Ordner für die Überwachung auswählen",
+            Description = LocalizationService.T("Loc_We_Dialog_PickWatch"),
             UseDescriptionForTitle = true
         };
         if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -147,7 +148,7 @@ public class WorkflowEditorViewModel : ViewModelBase
     {
         var dialog = new System.Windows.Forms.FolderBrowserDialog
         {
-            Description = "Zielordner zum Verschieben auswählen",
+            Description = LocalizationService.T("Loc_We_Dialog_PickMove"),
             UseDescriptionForTitle = true
         };
         if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -160,27 +161,27 @@ public class WorkflowEditorViewModel : ViewModelBase
 
         if (string.IsNullOrWhiteSpace(Name))
         {
-            ErrorMessage = "Bitte einen Namen eingeben.";
+            ErrorMessage = LocalizationService.T("Loc_We_Err_Name");
             return;
         }
         if (string.IsNullOrWhiteSpace(WatchPath) || !Directory.Exists(WatchPath))
         {
-            ErrorMessage = "Bitte einen gültigen Ordner auswählen.";
+            ErrorMessage = LocalizationService.T("Loc_We_Err_Folder");
             return;
         }
         if (string.IsNullOrWhiteSpace(PrinterName))
         {
-            ErrorMessage = "Bitte einen Drucker auswählen.";
+            ErrorMessage = LocalizationService.T("Loc_We_Err_Printer");
             return;
         }
         if (PostAction == PostActionType.Move && (string.IsNullOrWhiteSpace(MoveToPath) || !Directory.Exists(MoveToPath.Trim())))
         {
-            ErrorMessage = "Bitte einen gültigen Zielordner für \"Verschieben\" auswählen.";
+            ErrorMessage = LocalizationService.T("Loc_We_Err_MoveFolder");
             return;
         }
         if (PostAction == PostActionType.Rename && string.IsNullOrWhiteSpace(RenameTo))
         {
-            ErrorMessage = "Bitte einen neuen Dateinamen für \"Umbenennen\" eingeben.";
+            ErrorMessage = LocalizationService.T("Loc_We_Err_Rename");
             return;
         }
 

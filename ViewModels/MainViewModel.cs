@@ -72,7 +72,9 @@ public class MainViewModel : ViewModelBase
         else
             _fileWatcher.StopWatching(workflow.Id);
         Persist();
-        StatusMessage = workflow.IsEnabled ? $"Workflow \"{workflow.Name}\" aktiviert." : $"Workflow \"{workflow.Name}\" deaktiviert.";
+        StatusMessage = workflow.IsEnabled
+            ? LocalizationService.F("Loc_Msg_WorkflowEnabled", workflow.Name)
+            : LocalizationService.F("Loc_Msg_WorkflowDisabled", workflow.Name);
     }
 
     /// <summary>Workflow duplizieren (Kopie mit neuem Namen anlegen).</summary>
@@ -80,14 +82,14 @@ public class MainViewModel : ViewModelBase
     {
         if (SelectedWorkflow == null)
         {
-            StatusMessage = "Bitte einen Workflow auswählen.";
+            StatusMessage = LocalizationService.T("Loc_Msg_SelectWorkflow");
             return;
         }
         var src = SelectedWorkflow;
         var copy = new PrintWorkflow
         {
             Id = Guid.NewGuid(),
-            Name = "Kopie von " + src.Name,
+            Name = LocalizationService.T("Loc_CopyPrefix") + src.Name,
             WatchPath = src.WatchPath,
             FilePattern = src.FilePattern,
             PrinterName = src.PrinterName,
@@ -102,7 +104,7 @@ public class MainViewModel : ViewModelBase
         if (copy.IsEnabled)
             _fileWatcher.StartWatching(copy);
         Persist();
-        StatusMessage = $"Workflow \"{copy.Name}\" erstellt. Bitte ggf. anpassen und aktivieren.";
+        StatusMessage = LocalizationService.F("Loc_Msg_WorkflowCreated", copy.Name);
     }
 
     /// <summary>Workflow aus dem grafischen Editor übernehmen (Neu).</summary>
@@ -113,7 +115,7 @@ public class MainViewModel : ViewModelBase
         if (workflow.IsEnabled)
             _fileWatcher.StartWatching(workflow);
         Persist();
-        StatusMessage = $"Workflow \"{workflow.Name}\" hinzugefügt.";
+        StatusMessage = LocalizationService.F("Loc_Msg_WorkflowAdded", workflow.Name);
     }
 
     /// <summary>Workflow aus dem grafischen Editor übernehmen (Bearbeiten).</summary>
@@ -136,14 +138,14 @@ public class MainViewModel : ViewModelBase
         if (existing.IsEnabled)
             _fileWatcher.StartWatching(existing);
         Persist();
-        StatusMessage = $"Workflow \"{existing.Name}\" aktualisiert.";
+        StatusMessage = LocalizationService.F("Loc_Msg_WorkflowUpdated", existing.Name);
     }
 
     private void RefreshPrinters()
     {
         var list = _printerDiscovery.GetInstalledPrinterNames();
         InstalledPrinters.Clear();
-        InstalledPrinters.Add("Testmodus");
+        InstalledPrinters.Add(LocalizationService.T("Loc_TestPrinterName"));
         foreach (var p in list)
             InstalledPrinters.Add(p);
     }
@@ -152,7 +154,7 @@ public class MainViewModel : ViewModelBase
     {
         if (SelectedWorkflow == null)
         {
-            StatusMessage = "Bitte einen Workflow auswählen.";
+            StatusMessage = LocalizationService.T("Loc_Msg_SelectWorkflow");
             return;
         }
 
@@ -160,7 +162,7 @@ public class MainViewModel : ViewModelBase
         Workflows.Remove(SelectedWorkflow);
         SelectedWorkflow = null;
         Persist();
-        StatusMessage = "Workflow gelöscht.";
+        StatusMessage = LocalizationService.T("Loc_Msg_WorkflowDeleted");
     }
 
     private void LoadWorkflows()
@@ -183,7 +185,7 @@ public class MainViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Speichern fehlgeschlagen: {ex.Message}";
+            StatusMessage = LocalizationService.F("Loc_Msg_SaveFailed", ex.Message);
         }
     }
 

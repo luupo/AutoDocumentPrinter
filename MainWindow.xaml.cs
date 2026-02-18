@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Forms;
+using PrintMaster.Services;
 using PrintMaster.ViewModels;
 
 namespace PrintMaster;
@@ -30,7 +31,7 @@ public partial class MainWindow : Window
 
         _trayIcon = new NotifyIcon
         {
-            Text = "PrintMaster – Klicken zum Öffnen",
+            Text = LocalizationService.T("Loc_Tray_Tooltip"),
             Visible = true
         };
         try
@@ -52,13 +53,13 @@ public partial class MainWindow : Window
             _trayIcon.Icon = System.Drawing.SystemIcons.Application;
         }
 
-        var openItem = new ToolStripMenuItem("Fenster öffnen");
+        var openItem = new ToolStripMenuItem(LocalizationService.T("Loc_Tray_Open"));
         openItem.Click += (_, _) => { Show(); WindowState = WindowState.Normal; Activate(); };
-        var settingsItem = new ToolStripMenuItem("Einstellungen");
+        var settingsItem = new ToolStripMenuItem(LocalizationService.T("Loc_Tray_Settings"));
         settingsItem.Click += (_, _) => BtnSettings_Click(null!, null!);
-        var logItem = new ToolStripMenuItem("Log anzeigen");
+        var logItem = new ToolStripMenuItem(LocalizationService.T("Loc_Tray_Log"));
         logItem.Click += (_, _) => { Show(); Activate(); BtnLog_Click(null!, null!); };
-        var exitItem = new ToolStripMenuItem("Beenden");
+        var exitItem = new ToolStripMenuItem(LocalizationService.T("Loc_Tray_Exit"));
         exitItem.Click += (_, _) => { _isReallyClosing = true; Close(); };
 
         _trayIcon.ContextMenuStrip = new ContextMenuStrip();
@@ -75,8 +76,8 @@ public partial class MainWindow : Window
 
     private void LogService_PrintFailed(string filePath, string workflowName)
     {
-        _trayIcon?.ShowBalloonTip(5000, "PrintMaster – Druckfehler",
-            $"Workflow \"{workflowName}\": Druck fehlgeschlagen.\n{System.IO.Path.GetFileName(filePath)}",
+        _trayIcon?.ShowBalloonTip(5000, LocalizationService.T("Loc_Tray_FailTitle"),
+            LocalizationService.F("Loc_Tray_FailText", workflowName, System.IO.Path.GetFileName(filePath)),
             ToolTipIcon.Error);
     }
 
@@ -87,7 +88,7 @@ public partial class MainWindow : Window
         {
             e.Cancel = true;
             Hide();
-            _trayIcon?.ShowBalloonTip(2000, "PrintMaster", "In Tray minimiert. Doppelklick zum Öffnen.", ToolTipIcon.Info);
+            _trayIcon?.ShowBalloonTip(2000, LocalizationService.T("Loc_Tray_MinTitle"), LocalizationService.T("Loc_Tray_MinText"), ToolTipIcon.Info);
         }
         else
         {
@@ -157,7 +158,7 @@ public partial class MainWindow : Window
         var vm = MainVm;
         if (vm == null) return;
         vm.RefreshPrintersCommand.Execute(null);
-        var editorVm = new WorkflowEditorViewModel("Neuer Workflow", vm.InstalledPrinters.ToList(), null);
+        var editorVm = new WorkflowEditorViewModel(LocalizationService.T("Loc_Btn_NewWorkflow"), vm.InstalledPrinters.ToList(), null);
         var win = new WorkflowEditorWindow(editorVm) { Owner = this };
         if (win.ShowDialog() == true && editorVm.ResultWorkflow != null)
             vm.AddWorkflowFromEditor(editorVm.ResultWorkflow);
@@ -169,11 +170,11 @@ public partial class MainWindow : Window
         if (vm == null) return;
         if (vm.SelectedWorkflow == null)
         {
-            vm.StatusMessage = "Bitte einen Workflow auswählen.";
+            vm.StatusMessage = LocalizationService.T("Loc_Msg_SelectWorkflow");
             return;
         }
         vm.RefreshPrintersCommand.Execute(null);
-        var editorVm = new WorkflowEditorViewModel("Workflow bearbeiten", vm.InstalledPrinters.ToList(), vm.SelectedWorkflow);
+        var editorVm = new WorkflowEditorViewModel(LocalizationService.T("Loc_Btn_Edit"), vm.InstalledPrinters.ToList(), vm.SelectedWorkflow);
         var win = new WorkflowEditorWindow(editorVm) { Owner = this };
         if (win.ShowDialog() == true && editorVm.ResultWorkflow != null)
             vm.UpdateWorkflowFromEditor(editorVm.ResultWorkflow);

@@ -1,58 +1,100 @@
 # PrintMaster
 
-Windows-Desktopanwendung (WPF, .NET 8), die Druckaufträge automatisch auslöst, sobald in überwachten Ordnern passende Dateien erscheinen.
+PrintMaster watches folders and automatically sends matching files to a printer.  
+Great for shipping labels, online invoices, and other recurring documents.
 
-## Anforderungen
+---
 
-- **.NET 8 SDK** (z. B. von [dotnet.microsoft.com/download/dotnet/8.0](https://dotnet.microsoft.com/download/dotnet/8.0))
-- Windows (WPF)
+## ✨ Highlights
 
-## Projektstruktur
+- **Workflows** with:
+  - A watched folder (e.g. Downloads)
+  - One or more **file patterns** (wildcards or optional regex)
+  - Target printer
+  - Optional post‑processing (delete, move, rename)
+- **Tray app**:
+  - Minimizes to the system tray
+  - Tray menu: open window, settings, log, exit
+  - Balloon notifications on print errors
+- **Language support**: German + English  
+  (Automatically uses the system language; falls back to English)
+- **Autostart option** via the settings
+- **Backup & restore** for configuration
 
-```
-PrintMaster/
-├── Models/           # PrintWorkflow
-├── Services/          # WorkflowStorage, FileWatcher, Print, PrinterDiscovery
-├── ViewModels/        # MainViewModel, ViewModelBase, RelayCommand
-├── Views/             # (MainWindow im Projektroot)
-├── Styles/            # AppStyles.xaml
-├── App.xaml(.cs)
-├── MainWindow.xaml(.cs)
-└── PrintMaster.csproj
-```
+---
 
-## Funktionen
+## 🧩 Workflows & file patterns
 
-- **Workflows** definieren: Überwachter Ordner, Dateimuster (z. B. `Rechnung*.pdf`), Ziel-Drucker
-- **Hintergrund-Überwachung** per `FileSystemWatcher`; bei neuer passender Datei wird automatisch gedruckt („printto“-Verb)
-- **Konfiguration** wird in `%LocalAppData%\PrintMaster\workflows.json` gespeichert und beim Start geladen
+- You can create as many workflows as you like.
+- Per workflow:
+  - One watched folder
+  - **Multiple file patterns**, e.g.:
 
-## Anwendungsbeispiel: Versandetiketten Deutsche Post
+    ```text
+    AMZ*Invoice.pdf
+    EBY*Invoice.pdf
+    ETY*Invoice.pdf
+    ```
 
-Versandetiketten der Deutschen Post (z. B. aus dem Online-Frankiertool) sollen immer direkt auf den Etiketten-/Label-Drucker gehen, ohne manuelles Zuordnen.
+    (for files like `AMZ1234_Shop_Invoice.pdf`, `EBY5678_Shop_Invoice.pdf`, …)
 
-**Beispieldateiname:**  
-`Versandetiketten Deutsche Post A0060AXXXXX00000004C7.pdf`
+- **Pattern assistant**:
+  - In the workflow editor you can select one or more example files.
+  - The assistant suggests a wildcard pattern, e.g.:
 
-**Workflow in PrintMaster:**
+    ```text
+    AMZ1234_Shop_Invoice.pdf
+    AMZ5678_Shop_Invoice.pdf
+    → AMZ*Invoice.pdf
+    ```
 
-| Einstellung        | Wert                                                                 |
-|--------------------|----------------------------------------------------------------------|
-| **Name**           | z. B. „Deutsche Post Etiketten“                                     |
-| **Überwachter Ordner** | Ordner, in den die PDFs gelegt werden (z. B. Downloads oder ein eigener Ordner) |
-| **Dateimuster**    | `Versandetiketten Deutsche Post*.pdf` (Wildcard) oder Regex z. B. `^Versandetiketten Deutsche Post A\d+.*\.pdf$` |
-| **Ziel-Drucker**   | Ihr Etiketten-/Label-Drucker (z. B. „Label-Drucker“)                 |
+  - The suggestion is written into the **currently focused** pattern box.
 
-Sobald eine neue Datei mit diesem Muster im Ordner erscheint, wird sie automatisch an den gewählten Drucker gesendet. Optional kann im Workflow-Schritt 4 z. B. „Datei verschieben“ oder „Datei löschen“ nach dem Druck eingestellt werden.
+- A workflow can have multiple pattern boxes:
+  - „+“ adds another box
+  - From the second box onwards each box has an **“X”** to remove it.
 
-## Build & Start
+---
 
-```bash
-dotnet restore
-dotnet build
-dotnet run
-```
+## 📝 Log & error handling
 
-## Hinweis
+- Built‑in **log viewer**:
+  - Time, workflow, file, success/failure, message
+- On print errors:
+  - Entry in the log
+  - Tray balloon with workflow name + file name
 
-Zum Drucken wird `Process.Start` mit dem Verb `printto` verwendet. Funktioniert mit Dateitypen, die Windows standardmäßig drucken kann (z. B. PDF, wenn ein PDF-Drucktreiber/Viewer registriert ist). Fehler (fehlender Drucker, gesperrte Datei) werden abgefangen und führen nicht zum Absturz der App.
+---
+
+## 💾 Backup & restore
+
+- In **Settings**:
+  - **“Create backup”**:
+    - saves all relevant JSON configuration files  
+      (`workflows.json`, `settings.json`, `language.json`, …) into a ZIP
+  - **“Restore backup”**:
+    - restores a previously created backup
+    - shows a hint to restart the app afterwards
+
+---
+
+## ⚙️ Installation / usage
+
+- This repository ships a **self‑contained single‑file EXE** (published in releases):
+  - `PrintMaster.exe` (win‑x64, no separate .NET install required)
+- Just:
+  1. Download the EXE from the release page
+  2. Put it in a folder of your choice
+  3. Run it – done
+
+Optional:
+- Enable autostart in the settings to start PrintMaster automatically with Windows.
+
+---
+
+## 🔍 Known limitations
+
+- Currently only the **“folder → printer”** scenario is supported  
+  (no real Windows printer driver yet).
+- Pattern assistant generates wildcards for “normal” names; exotic file names may still need manual tweaking.
+- Dark mode is prepared but currently disabled – the UI uses the stable light theme.

@@ -19,7 +19,7 @@ public class BackupService : IBackupService
 
     public string CreateBackup()
     {
-        var fileName = $"PrintMaster_backup_{DateTime.Now:yyyyMMdd_HHmmss}.zip";
+        var fileName = $"AutoDocPrinter_backup_{DateTime.Now:yyyyMMdd_HHmmss}.zip";
         var targetPath = Path.Combine(BackupFolder, fileName);
 
         using var zip = ZipFile.Open(targetPath, ZipArchiveMode.Create);

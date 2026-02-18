@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=System.Runtime">
     <!-- Main -->
-    <sys:String x:Key="Loc_Main_Title">PrintMaster – Workflows</sys:String>
-    <sys:String x:Key="Loc_Main_Header">PrintMaster</sys:String>
+    <sys:String x:Key="Loc_Main_Title">AutoDocPrinter – Workflows</sys:String>
+    <sys:String x:Key="Loc_Main_Header">AutoDocPrinter</sys:String>
     <sys:String x:Key="Loc_Col_Active">On</sys:String>
     <sys:String x:Key="Loc_Col_Name">Name</sys:String>
     <sys:String x:Key="Loc_Col_Folder">Folder</sys:String>
@@ -33,7 +33,7 @@
     <sys:String x:Key="Loc_Lang_German">German</sys:String>
 
     <!-- Log -->
-    <sys:String x:Key="Loc_Log_Title">PrintMaster – Log</sys:String>
+    <sys:String x:Key="Loc_Log_Title">AutoDocPrinter – Log</sys:String>
     <sys:String x:Key="Loc_Log_Header">Recent runs (success and failures)</sys:String>
     <sys:String x:Key="Loc_Log_Col_Time">Time</sys:String>
     <sys:String x:Key="Loc_Log_Col_Workflow">Workflow</sys:String>
@@ -67,14 +67,14 @@
     <sys:String x:Key="Loc_Post_Rename">Rename file</sys:String>
 
     <!-- Tray -->
-    <sys:String x:Key="Loc_Tray_Tooltip">PrintMaster – Click to open</sys:String>
+    <sys:String x:Key="Loc_Tray_Tooltip">AutoDocPrinter – Click to open</sys:String>
     <sys:String x:Key="Loc_Tray_Open">Open window</sys:String>
     <sys:String x:Key="Loc_Tray_Settings">Settings</sys:String>
     <sys:String x:Key="Loc_Tray_Log">Show log</sys:String>
     <sys:String x:Key="Loc_Tray_Exit">Exit</sys:String>
-    <sys:String x:Key="Loc_Tray_MinTitle">PrintMaster</sys:String>
+    <sys:String x:Key="Loc_Tray_MinTitle">AutoDocPrinter</sys:String>
     <sys:String x:Key="Loc_Tray_MinText">Minimized to tray. Double-click to open.</sys:String>
-    <sys:String x:Key="Loc_Tray_FailTitle">PrintMaster – Print error</sys:String>
+    <sys:String x:Key="Loc_Tray_FailTitle">AutoDocPrinter – Print error</sys:String>
     <sys:String x:Key="Loc_Tray_FailText">Workflow "{0}": print failed.\n{1}</sys:String>
 
     <!-- Messages -->
@@ -99,7 +99,7 @@
 
     <!-- Test mode -->
     <sys:String x:Key="Loc_TestPrinterName">Test mode</sys:String>
-    <sys:String x:Key="Loc_Test_Title">PrintMaster – Test mode</sys:String>
+    <sys:String x:Key="Loc_Test_Title">AutoDocPrinter – Test mode</sys:String>
     <sys:String x:Key="Loc_Test_Body">The workflow was triggered.\n\nFile: {0}\n\nTest mode is still enabled.</sys:String>
 
     <!-- Backup -->
@@ -108,7 +108,7 @@
     <sys:String x:Key="Loc_Backup_Created">Backup created:\n{0}</sys:String>
     <sys:String x:Key="Loc_Backup_CreateFailed">Backup could not be created:\n{0}</sys:String>
     <sys:String x:Key="Loc_Backup_OpenDialogTitle">Select backup file</sys:String>
-    <sys:String x:Key="Loc_Backup_Restored">Backup has been restored.\nPlease restart PrintMaster so all settings are applied.</sys:String>
+    <sys:String x:Key="Loc_Backup_Restored">Backup has been restored.\nPlease restart AutoDocPrinter so all settings are applied.</sys:String>
     <sys:String x:Key="Loc_Backup_RestoreFailed">Backup could not be restored:\n{0}</sys:String>
 
     <!-- Pattern assistant -->

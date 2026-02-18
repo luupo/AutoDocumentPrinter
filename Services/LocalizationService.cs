@@ -101,7 +101,7 @@ public static class LocalizationService
     private static System.Windows.ResourceDictionary? LoadLanguageDictionary(string language)
     {
         var name = language == German ? "de.xaml" : "en.xaml";
-        var uri = new Uri($"pack://application:,,,/PrintMaster;component/Languages/{name}", UriKind.Absolute);
+        var uri = new Uri($"pack://application:,,,/AutoDocPrinter;component/Languages/{name}", UriKind.Absolute);
         return new System.Windows.ResourceDictionary { Source = uri };
     }
 }

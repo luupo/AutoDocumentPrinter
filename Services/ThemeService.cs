@@ -39,7 +39,7 @@ public static class ThemeService
     private static ResourceDictionary? LoadThemeDictionary(string theme)
     {
         var name = theme == Dark ? "Dark.xaml" : "Light.xaml";
-        var uri = new Uri($"pack://application:,,,/PrintMaster;component/Themes/{name}", UriKind.Absolute);
+        var uri = new Uri($"pack://application:,,,/AutoDocPrinter;component/Themes/{name}", UriKind.Absolute);
         return new ResourceDictionary { Source = uri };
     }
 }

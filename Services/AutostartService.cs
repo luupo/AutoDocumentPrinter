@@ -5,7 +5,7 @@ namespace PrintMaster.Services;
 
 public class AutostartService : IAutostartService
 {
-    private const string ShortcutName = "PrintMaster.lnk";
+    private const string ShortcutName = "AutoDocPrinter.lnk";
     private readonly string _settingsPath;
     private bool _cached;
 

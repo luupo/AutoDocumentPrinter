@@ -81,7 +81,7 @@ public class SettingsViewModel : ViewModelBase
         {
             var dlg = new Microsoft.Win32.OpenFileDialog
             {
-                Filter = "PrintMaster Backup (*.zip)|*.zip|Alle Dateien (*.*)|*.*",
+                Filter = "AutoDocPrinter Backup (*.zip)|*.zip|Alle Dateien (*.*)|*.*",
                 InitialDirectory = _backupService.BackupFolder,
                 Title = LocalizationService.T("Loc_Backup_OpenDialogTitle")
             };

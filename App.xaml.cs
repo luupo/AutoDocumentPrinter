@@ -14,7 +14,7 @@ public partial class App : System.Windows.Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        const string mutexName = "PrintMaster_SingleInstance_Mutex";
+        const string mutexName = "AutoDocPrinter_SingleInstance_Mutex";
         _singleInstanceMutex = new Mutex(true, mutexName, out var createdNew);
         if (!createdNew)
         {

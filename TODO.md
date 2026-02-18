@@ -1,4 +1,4 @@
-# PrintMaster – TODO / geplante Funktionen
+# AutoDocPrinter – TODO / geplante Funktionen
 
 *(Sortiert nach Priorität)*
 
@@ -6,9 +6,9 @@
 
 ## Priorität 1 (hoch)
 
-### Eigener „PrintMaster“-Drucker
-- **Virtueller Drucker:** Über die Einstellungen einen eigenen Drucker installierbar (z. B. „PrintMaster“), der im System wie ein normaler Drucker erscheint.
-- **Neuer Workflow-Trigger:** Statt nur „Datei in Ordner“ → Alternative: **Druck über unseren Drucker**. Wenn jemand auf „PrintMaster“ druckt, löst das einen konfigurierten Workflow aus. Damit kann ohne Datei herunterladen direkt der Workflow getriggert werden (Druckauftrag → Ziel-Drucker/Nachverarbeitung).
+### Eigener „AutoDocPrinter“-Drucker
+- **Virtueller Drucker:** Über die Einstellungen einen eigenen Drucker installierbar (z. B. „AutoDocPrinter“), der im System wie ein normaler Drucker erscheint.
+- **Neuer Workflow-Trigger:** Statt nur „Datei in Ordner“ → Alternative: **Druck über unseren Drucker**. Wenn jemand auf „AutoDocPrinter“ druckt, löst das einen konfigurierten Workflow aus. Damit kann ohne Datei herunterladen direkt der Workflow getriggert werden (Druckauftrag → Ziel-Drucker/Nachverarbeitung).
 
 ---
 

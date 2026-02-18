@@ -1,6 +1,6 @@
-# PrintMaster
+# AutoDocPrinter
 
-PrintMaster watches folders and automatically sends matching files to a printer.  
+AutoDocPrinter watches folders and automatically sends matching files to a printer.  
 Great for shipping labels, online invoices, and other recurring documents.
 
 ---
@@ -81,14 +81,14 @@ Great for shipping labels, online invoices, and other recurring documents.
 ## ⚙️ Installation / usage
 
 - This repository ships a **self‑contained single‑file EXE** (published in releases):
-  - `PrintMaster.exe` (win‑x64, no separate .NET install required)
+  - `AutoDocPrinter.exe` (win‑x64, no separate .NET install required)
 - Just:
   1. Download the EXE from the release page
   2. Put it in a folder of your choice
   3. Run it – done
 
 Optional:
-- Enable autostart in the settings to start PrintMaster automatically with Windows.
+- Enable autostart in the settings to start AutoDocPrinter automatically with Windows.
 
 ---
 
